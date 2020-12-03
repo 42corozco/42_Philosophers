@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corozco <????@????.???>                    +#+  +:+       +#+        */
+/*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2020/12/03 02:28:10 by corozco          ###   ########.fr       */
+/*   Updated: 2020/12/03 02:39:41 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-int     main(int ac, char **av)
+int		main(int ac, char **av)
 {
-    write(1, "Philo\n", 6);
-    (void)ac;
-    (void)av;
-    return (0);
+	write(1, "Philo\n", 6);
+	(void)ac;
+	(void)av;
+	return (0);
 }
