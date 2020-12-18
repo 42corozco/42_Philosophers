@@ -13,7 +13,8 @@
 NAME = philo_one
 HEAD := -I./includes/ 
 
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror
+CFLAGS =
 CFLAGSF = -g3 -fsanitize=address -Wall -Wextra -Werror
 
 

@@ -13,14 +13,31 @@
 #ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
+# include <stdlib.h>
+
 typedef struct  s_philo
 {
+    int         id;
+    int         fl;
+    int         fr;
+    int         t_die;
+    int         t_eat;
+    int         t_sleep;
+}               t_philo;
+
+
+typedef struct  s_var
+{
     int         number_of_philosopher;
-    int         fork;
+    int         *forks;
     int         time_to_die;
     int         time_to_eat;
     int         time_to_sleep;
     int         notepmt;
-}               t_philo;
+
+	int			borrar;
+
+    t_philo     *ph;
+}               t_var;
 
 #endif
