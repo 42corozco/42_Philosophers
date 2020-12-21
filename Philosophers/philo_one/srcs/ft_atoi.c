@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   ft_atoi.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
-
-# include <stdlib.h>
-# include "tools.h"
-
-typedef struct  s_philo
+static int  ft_isspace(const char s)
 {
-    int         id;
-    int         *fl;
-    int         *fr;
-    int         t_die;
-    int         t_eat;
-    int         t_sleep;
-    int         cont_eats;
-}               t_philo;
+	return (s == '\t' || s == '\n' || s == '\v'
+			|| s == '\f' || s == '\r' || s == ' ');
+}
 
-
-typedef struct  s_var
+int		    ft_atoi(const char *str)
 {
-    int         number_of_philosopher;
-    int         *forks;
-    int         time_to_die;
-    int         time_to_eat;
-    int         time_to_sleep;
-    int         notepmt;
+	long nb;
+	long nega;
 
-	int			borrar;
-
-    t_philo     *ph;
-}               t_var;
-
-#endif
+	nb = 0;
+	nega = 1;
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '-' || *str == '+')
+		*str++ == '-' ? nega = -nega : nega;
+	while (*str && *str <= '9' && *str >= '0')
+	{
+		nb = nb * 10 + (*str++ - 48);
+		if (nb < 0 && nega == 1)
+			return (-1);
+		if (nb < 0 && nega == -1)
+			return (0);
+	}
+	return (nb * nega);
+}

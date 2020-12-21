@@ -16,7 +16,21 @@
 #include <sys/time.h>
 #include "philo_one.h"
 
-int			p_len(char *str)
+void			printfphilo(t_var *var)
+{
+	int i;
+
+	i = -1;
+	while (++i < var->number_of_philosopher)
+	{
+		printf("philo->id[%d]\n", var->ph[i].id);
+		printf("\tlf[%d]\n", *var->ph[i].fl);
+		printf("\tlr[%d]\n", *var->ph[i].fr);
+	}
+}
+
+
+int			ft_strlen(char *str)
 {
 	int i;
 
@@ -28,7 +42,7 @@ int			p_len(char *str)
 
 int			ms_error(char *str)
 {
-	write(2, str, p_len(str));
+	write(2, str, ft_strlen(str));
 	return (write(2, "\n", 1));
 }
 
@@ -48,18 +62,31 @@ int			*create_forks(int n)
 	return (tmp);
 }
 
-int			parse_arg(t_var *var, char **av)
+int			parse_arg(t_var *var, int ac, char **av)
 {
-	var->number_of_philosopher = 4;
-	if (!(var->forks = create_forks(var->number_of_philosopher)))
+	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
-	var->time_to_die = 1000;
-	var->time_to_eat = 100;
-	var->time_to_sleep = 100;
-	var->notepmt = 10;
-	(void)av;
+	if (!(var->forks = create_forks(var->number_of_philosopher)))
+		return (-1);
+	if ((var->time_to_die = ft_atoi(av[2])) < 1)
+		return (1);
+	if ((var->time_to_eat = ft_atoi(av[3])) < 1)
+		return (1);
+	if ((var->time_to_sleep = ft_atoi(av[4])) < 1)
+		return (1);
+	if (ac == 6)
+	{
+		if ((var->notepmt = ft_atoi(av[5])) < 0)
+			return (1);
+	}
+	else
+		var->notepmt = 0;
+	printf("philos = [%d]\n", var->number_of_philosopher);
+	printf("die = [%d]\n", var->time_to_die);
+	printf("eat = [%d]\n", var->time_to_eat);
+	printf("sleep = [%d]\n", var->time_to_sleep);
+	printf("notepmt = [%d]\n", var->notepmt);
 	return (0);
-	return (1); //si un erreur
 }
 
 void		*fa(void *tmp)
@@ -76,22 +103,40 @@ void		*fa(void *tmp)
 	return (NULL);
 }
 
-int				create_philos(t_var *var)
+int				params_philo(t_var *var)
 {
-	pthread_t	*philo_nb;
 	int			i;
 
-	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
+	i = -1;
+	if (!(var->ph = malloc(sizeof(t_philo) * var->number_of_philosopher)))
+		return (0);
+	while (++i < var->number_of_philosopher)
+	{
+		var->ph[i].id = i;
+		if (i == 0)
+			var->ph[i].fl = &var->forks[var->number_of_philosopher - 1];
+		else
+			var->ph[i].fl = &var->forks[i - 1];
+		var->ph[i].fr = &var->forks[i];
+	}
+
+
+	printfphilo(var);
+	return (1);
+}
+
+int				create_philos(t_var *var)
+{
+//	pthread_t	*philo_nb;
+//	int			i;
+
+//	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
+//		return (-1);
+
+	if (!params_philo(var))
 		return (-1);
-//	pthread_t b;
-//	pthread_t c;
-//	pthread_t d;
-
-	i = 0;
-	char *tab[7]= {"lundi", "mardi", "mercredi",
-                     "jeudi", "vendredi", "samedi",
-                     "dimanche"};
-
+//	i = 0;
+/*	char *tab[7]= {"lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"};
 	while (i < var->number_of_philosopher)
 	{
 		pthread_create(&philo_nb[i], NULL, fa, tab[i]);
@@ -103,12 +148,7 @@ int				create_philos(t_var *var)
 		pthread_join(philo_nb[i], NULL);
 		i++;
 	}
-//	pthread_create(&b, NULL, fa, "2");
-//	pthread_create(&c, NULL, fa, "3");
-//	pthread_create(&d, NULL, fa, "4");
-//	pthread_join(b, NULL);
-//	pthread_join(c, NULL);
-//	pthread_join(d, NULL);
+*/
 	return (0);
 }
 
@@ -116,9 +156,9 @@ int			main(int ac, char **av)
 {
 	t_var	var;
 	(void)ac;
-//	if (ac < 5 || ac > 6)
-//		return (ms_error("Error: arguments"));
-	if (parse_arg(&var, av))
+	if (ac < 5 || ac > 6)
+		return (ms_error("Error: arguments"));
+	if (parse_arg(&var, ac, av))
 		return (ms_error("Error: parsing"));
 /*
 	struct timeval te, ta; 

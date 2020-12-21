@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   tools.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef TOOLS_H
+# define TOOLS_H
 
-# include <stdlib.h>
-# include "tools.h"
-
-typedef struct  s_philo
-{
-    int         id;
-    int         *fl;
-    int         *fr;
-    int         t_die;
-    int         t_eat;
-    int         t_sleep;
-    int         cont_eats;
-}               t_philo;
-
-
-typedef struct  s_var
-{
-    int         number_of_philosopher;
-    int         *forks;
-    int         time_to_die;
-    int         time_to_eat;
-    int         time_to_sleep;
-    int         notepmt;
-
-	int			borrar;
-
-    t_philo     *ph;
-}               t_var;
+int		    ft_atoi(const char *str);
 
 #endif

@@ -19,7 +19,9 @@ CFLAGSF = -g3 -fsanitize=address -Wall -Wextra -Werror
 
 
 SRC := \
-	srcs/main.c 
+	srcs/ft_atoi.c \
+	srcs/main.c
+
 
 OBJS = $(addprefix objs/, $(SRC:.c=.o))
 #color
