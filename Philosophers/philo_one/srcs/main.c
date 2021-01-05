@@ -16,6 +16,16 @@
 #include <sys/time.h>
 #include "philo_one.h"
 
+long long	actual_time()
+{
+	struct timeval	te;
+	long long		mili;
+
+	gettimeofday(&te, NULL);
+	mili = te.tv_sec*1000LL + te.tv_usec/1000;
+	return (mili);
+}
+
 void			printfphilo(t_var *var)
 {
 	int i;
@@ -24,8 +34,12 @@ void			printfphilo(t_var *var)
 	while (++i < var->number_of_philosopher)
 	{
 		printf("philo->id[%d]\n", var->ph[i].id);
-		printf("\tlf[%d]\n", *var->ph[i].fl);
-		printf("\tlr[%d]\n", *var->ph[i].fr);
+//		printf("\tlf[%d]\n", *var->ph[i].fl);
+//		printf("\tlr[%d]\n", *var->ph[i].fr);
+		printf("ultima comida[%lld]\n", var->ph[i].u_comida);
+		usleep(200);
+		printf("ultima comida[%lld]\n", actual_time() - var->ph[i].u_comida);
+		break;
 	}
 }
 
@@ -46,19 +60,16 @@ int			ms_error(char *str)
 	return (write(2, "\n", 1));
 }
 
-int			*create_forks(int n)
+pthread_mutex_t		*create_forks(int n)
 {
-	int		*tmp;
-	int		i;
+	pthread_mutex_t		*tmp;
+	int					i;
 
-	if (!(tmp = malloc(sizeof(int) * n)))
+	if (!(tmp = malloc(sizeof(pthread_mutex_t) * n)))
 		return (NULL);
 	i = 0;
 	while (i < n)
-	{
-		tmp[i++] = 0;
-//		printf("[%d]\n", tmp[i - 1]);
-	}
+		pthread_mutex_init (&tmp[i++], NULL);
 	return (tmp);
 }
 
@@ -118,9 +129,8 @@ int				params_philo(t_var *var)
 		else
 			var->ph[i].fl = &var->forks[i - 1];
 		var->ph[i].fr = &var->forks[i];
+		var->ph[i].u_comida = actual_time();
 	}
-
-
 	printfphilo(var);
 	return (1);
 }
@@ -160,15 +170,7 @@ int			main(int ac, char **av)
 		return (ms_error("Error: arguments"));
 	if (parse_arg(&var, ac, av))
 		return (ms_error("Error: parsing"));
-/*
-	struct timeval te, ta; 
-	gettimeofday(&te, NULL); // get current time
-	long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
-	printf("seconds : [%ld] - milliseconds : [%lld]\n", te.tv_sec, milliseconds);
-	gettimeofday(&ta, NULL); // get current time
-	long long segundos = (ta.tv_sec*1000LL + ta.tv_usec/1000) - milliseconds;
-	printf("seconds : micro seconds : [%lld]\n", segundos);
-*/
+
 	create_philos(&var);
 	return (0);
 }

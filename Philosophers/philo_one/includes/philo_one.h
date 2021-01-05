@@ -15,31 +15,32 @@
 
 # include <stdlib.h>
 # include "tools.h"
+#include <pthread.h>
 
-typedef struct  s_philo
+typedef struct		s_philo
 {
-    int         id;
-    int         *fl;
-    int         *fr;
-    int         t_die;
-    int         t_eat;
-    int         t_sleep;
-    int         cont_eats;
-}               t_philo;
+	int				id;
+	pthread_mutex_t	*fl;
+	pthread_mutex_t	*fr;
+	long long		t_ini;
+	long long		u_comida;
+//	int			t_sleep;
+	int			cont_eats;
+}					t_philo;
 
 
-typedef struct  s_var
+typedef struct		s_var
 {
-    int         number_of_philosopher;
-    int         *forks;
-    int         time_to_die;
-    int         time_to_eat;
-    int         time_to_sleep;
-    int         notepmt;
+	int				number_of_philosopher;
+	pthread_mutex_t	*forks;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				notepmt;
 
-	int			borrar;
+	int				borrar;
 
-    t_philo     *ph;
-}               t_var;
+	t_philo			*ph;
+}					t_var;
 
 #endif
