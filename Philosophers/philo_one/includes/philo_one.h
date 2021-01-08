@@ -22,9 +22,11 @@ typedef struct		s_philo
 	int				id;
 	pthread_mutex_t	*fl;
 	pthread_mutex_t	*fr;
-	long long		t_ini;
+	long long		ttinit;
 	long long		u_comida;
-//	int			t_sleep;
+	int				ttdie;
+	int				tteat;
+	int				ttsleep;
 	int			cont_eats;
 }					t_philo;
 
