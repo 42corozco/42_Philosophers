@@ -23,7 +23,7 @@ typedef struct		s_philo
 	pthread_mutex_t	*fl;
 	pthread_mutex_t	*fr;
 	long long		ttinit;
-	long long		u_comida;
+	long long		lmeal;
 	int				ttdie;
 	int				tteat;
 	int				ttsleep;

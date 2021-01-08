@@ -51,7 +51,7 @@ void			printfphilo(t_var *var)
 	{
 		printf("philo->id[%d]\n", var->ph[i].id);
 		//	ft_usleep(10 * 1000);
-		printf("actual_time [%lld] ultima comida[%lld]\n", actual_time(), var->ph[i].u_comida);
+		printf("actual_time [%lld] ultima comida[%lld]\n", actual_time(), var->ph[i].lmeal);
 	}
 }
 
@@ -112,6 +112,17 @@ int			parse_arg(t_var *var, int ac, char **av)
 	return (0);
 }
 
+void		is_eating(t_philo *philo)
+{
+	pthread_mutex_lock(philo->fl);
+	pthread_mutex_lock(philo->fr);
+	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
+	philo->lmeal = actual_time();
+	ft_usleep(philo->tteat * 1000);
+	pthread_mutex_unlock(philo->fl);
+	pthread_mutex_unlock(philo->fr);
+}
+
 void		*fa(void *tmp)
 {
 	t_philo	*philo;
@@ -119,8 +130,7 @@ void		*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (1)
 	{
-		printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
-		ft_usleep(philo->tteat * 1000);
+		is_eating(philo);
 		printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
 		ft_usleep(philo->ttsleep* 1000);
 		printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
@@ -148,7 +158,7 @@ int				params_philo(t_var *var)
 		else
 			var->ph[i].fl = &var->forks[i - 1];
 		var->ph[i].fr = &var->forks[i];
-		var->ph[i].u_comida = actual_time();
+		var->ph[i].lmeal = actual_time();
 	}
 	printfphilo(var);
 	return (1);
@@ -165,12 +175,16 @@ int				create_philos(t_var *var)
 	if (!params_philo(var))
 		return (-1);
 	i = 0;
-	char *tab[7]= {"lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"};
 	while (i < var->number_of_philosopher)
 	{
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		//pthread_create(&philo_nb[i], NULL, fa, var);
-		i++;
+		i += 2;
+	}
+	i = 1;
+	while (i < var->number_of_philosopher)
+	{
+		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
+		i += 2;
 	}
 	i = 0;
 	while (i < var->number_of_philosopher)
