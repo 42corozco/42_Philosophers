@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/10 15:54:40 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/10 17:45:08 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,6 @@ int				parse_arg(t_var *var, int ac, char **av)
 	}
 	else
 		var->notepmt = 0;
-	printf("philos = [%d]\n", var->number_of_philosopher);
-	printf("die = [%d]\n", var->time_to_die);
-	printf("eat = [%d]\n", var->time_to_eat);
-	printf("sleep = [%d]\n", var->time_to_sleep);
-	printf("notepmt = [%d]\n", var->notepmt);
 	return (0);
 }
 
