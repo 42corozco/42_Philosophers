@@ -6,73 +6,21 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2020/12/05 04:21:42 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/10 15:54:40 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <sys/time.h>
 #include "philo_one.h"
 
-long long	actual_time()
-{
-	struct timeval	te;
-	long long		mili;
-
-	gettimeofday(&te, NULL);
-	mili = te.tv_sec*1000LL + te.tv_usec/1000;
-	return (mili);
-}
-
-void    ft_usleep(unsigned int n)
-{
-	struct timeval    start;
-	struct timeval    step;
-
-	gettimeofday(&start, NULL);
-	while (1)
-	{
-		usleep(10);
-		gettimeofday(&step, NULL);
-		if ((size_t)(((size_t)(step.tv_sec - start.tv_sec)) * 1000000 +
-					((size_t)(step.tv_usec - start.tv_usec))) > n)
-			break ;
-	}
-}
-
-void			printfphilo(t_var *var)
-{
-	int i;
-
-	i = -1;
-	while (++i < var->number_of_philosopher)
-	{
-		printf("philo->id[%d]\n", var->ph[i].id);
-		//	ft_usleep(10 * 1000);
-		printf("actual_time [%lld] ultima comida[%lld]\n", actual_time(), var->ph[i].lmeal);
-	}
-}
-
-
-int			ft_strlen(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str && *str++)
-		i++;
-	return (i);
-}
-
-int			ms_error(char *str)
+int				ms_error(char *str)
 {
 	write(2, str, ft_strlen(str));
 	return (write(2, "\n", 1));
 }
 
-pthread_mutex_t		*create_forks(int n)
+pthread_mutex_t	*create_forks(int n)
 {
 	pthread_mutex_t		*tmp;
 	int					i;
@@ -81,11 +29,11 @@ pthread_mutex_t		*create_forks(int n)
 		return (NULL);
 	i = 0;
 	while (i < n)
-		pthread_mutex_init (&tmp[i++], NULL);
+		pthread_mutex_init(&tmp[i++], NULL);
 	return (tmp);
 }
 
-int			parse_arg(t_var *var, int ac, char **av)
+int				parse_arg(t_var *var, int ac, char **av)
 {
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
@@ -112,29 +60,58 @@ int			parse_arg(t_var *var, int ac, char **av)
 	return (0);
 }
 
-void		is_eating(t_philo *philo)
+void			is_eating(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fl);
+	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	pthread_mutex_lock(philo->fr);
+	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
+	philo->cont_eats++;
 	ft_usleep(philo->tteat * 1000);
 	pthread_mutex_unlock(philo->fl);
 	pthread_mutex_unlock(philo->fr);
 }
 
-void		*fa(void *tmp)
+void			is_sleeping(t_philo *philo)
+{
+	printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
+	ft_usleep(philo->ttsleep * 1000);
+}
+
+void			*moni(void *tmp)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)tmp;
-	while (1)
+	while (philo->status != 1)
+	{
+		if (actual_time() - philo->lmeal > philo->ttdie)
+		{
+			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+			philo->status = 1;
+			break;
+		}
+	}
+	return (NULL);
+}
+
+void			*fa(void *tmp)
+{
+	t_philo		*philo;
+	pthread_t	sta;
+
+	philo = (t_philo *)tmp;
+	pthread_create(&sta, NULL, moni, tmp);
+	pthread_detach(sta);
+	while (philo->status != 1)
 	{
 		is_eating(philo);
-		printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
-		ft_usleep(philo->ttsleep* 1000);
+		
+		is_sleeping(philo);
+
 		printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
-		ft_usleep(400* 1000);
 	}
 	return (NULL);
 }
@@ -158,9 +135,10 @@ int				params_philo(t_var *var)
 		else
 			var->ph[i].fl = &var->forks[i - 1];
 		var->ph[i].fr = &var->forks[i];
+		var->ph[i].cont_eats = 0;
+		var->ph[i].status = 0;
 		var->ph[i].lmeal = actual_time();
 	}
-	printfphilo(var);
 	return (1);
 }
 
@@ -171,7 +149,6 @@ int				create_philos(t_var *var)
 
 	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
 		return (-1);
-
 	if (!params_philo(var))
 		return (-1);
 	i = 0;
@@ -180,6 +157,7 @@ int				create_philos(t_var *var)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 		i += 2;
 	}
+	ft_usleep(5);
 	i = 1;
 	while (i < var->number_of_philosopher)
 	{
@@ -188,23 +166,19 @@ int				create_philos(t_var *var)
 	}
 	i = 0;
 	while (i < var->number_of_philosopher)
-	{
-		pthread_join(philo_nb[i], NULL);
-		i++;
-	}
-
+		pthread_join(philo_nb[i++], NULL);
 	return (0);
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_var	var;
+
 	(void)ac;
 	if (ac < 5 || ac > 6)
 		return (ms_error("Error: arguments"));
 	if (parse_arg(&var, ac, av))
 		return (ms_error("Error: parsing"));
-
 	create_philos(&var);
 	return (0);
 }

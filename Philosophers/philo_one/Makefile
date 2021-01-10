@@ -6,12 +6,12 @@
 #    By: corozco <????@????.???>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/03 02:02:47 by corozco           #+#    #+#              #
-#    Updated: 2020/12/03 02:29:23 by corozco          ###   ########.fr        #
+#    Updated: 2021/01/10 13:06:41 by corozco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo_one
-HEAD := -I./includes/ 
+HEAD := -I./includes/
 
 #CFLAGS = -Wall -Wextra -Werror
 CFLAGS =
@@ -20,6 +20,8 @@ CFLAGSF = -g3 -fsanitize=address -Wall -Wextra -Werror
 
 SRC := \
 	srcs/ft_atoi.c \
+	srcs/ft_strlen.c \
+	srcs/f_times.c \
 	srcs/main.c
 
 

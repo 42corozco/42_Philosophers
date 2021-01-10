@@ -6,16 +6,18 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2020/12/04 01:04:45 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/10 15:42:59 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
-# include <stdlib.h>
 # include "tools.h"
-#include <pthread.h>
+# include <stdlib.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 typedef struct		s_philo
 {
@@ -27,9 +29,9 @@ typedef struct		s_philo
 	int				ttdie;
 	int				tteat;
 	int				ttsleep;
-	int			cont_eats;
+	int				cont_eats;
+	int				status;
 }					t_philo;
-
 
 typedef struct		s_var
 {

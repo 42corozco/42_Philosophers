@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.h                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
+/*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/10 13:06:23 by corozco          ###   ########.fr       */
+/*   Created: 2021/01/10 13:06:07 by corozco           #+#    #+#             */
+/*   Updated: 2021/01/10 13:07:02 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOOLS_H
-# define TOOLS_H
+int			ft_strlen(char *str)
+{
+	int i;
 
-int			ft_atoi(const char *str);
-int			ft_strlen(char *str);
-long long	actual_time(void);
-void		ft_usleep(unsigned int n);
-
-#endif
+	i = 0;
+	while (str && *str++)
+		i++;
+	return (i);
+}

@@ -6,20 +6,20 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2020/12/04 01:04:45 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/10 12:57:14 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static int  ft_isspace(const char s)
+static int	ft_isspace(const char s)
 {
 	return (s == '\t' || s == '\n' || s == '\v'
 			|| s == '\f' || s == '\r' || s == ' ');
 }
 
-int		    ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
-	long nb;
-	long nega;
+	long	nb;
+	long	nega;
 
 	nb = 0;
 	nega = 1;
