@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/10 17:45:08 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/12 14:37:04 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,15 @@ int				parse_arg(t_var *var, int ac, char **av)
 
 void			is_eating(t_philo *philo)
 {
-	pthread_mutex_lock(philo->fl);
+	if (philo->id % 2 == 1)
+		pthread_mutex_lock(philo->fr);
+	else
+		pthread_mutex_lock(philo->fl);
+	if (philo->id % 2 == 1)
+		pthread_mutex_lock(philo->fl);
+	else
+		pthread_mutex_lock(philo->fr);
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
-	pthread_mutex_lock(philo->fr);
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
@@ -86,6 +92,7 @@ void			*moni(void *tmp)
 		{
 			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
 			philo->status = 1;
+			exit(1);
 			break;
 		}
 	}
@@ -98,8 +105,6 @@ void			*fa(void *tmp)
 	pthread_t	sta;
 
 	philo = (t_philo *)tmp;
-	pthread_create(&sta, NULL, moni, tmp);
-	pthread_detach(sta);
 	while (philo->status != 1)
 	{
 		is_eating(philo);
@@ -152,7 +157,6 @@ int				create_philos(t_var *var)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 		i += 2;
 	}
-	ft_usleep(5);
 	i = 1;
 	while (i < var->number_of_philosopher)
 	{
