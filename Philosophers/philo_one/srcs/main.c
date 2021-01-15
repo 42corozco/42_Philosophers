@@ -55,7 +55,7 @@ int				parse_arg(t_var *var, int ac, char **av)
 	return (0);
 }
 
-void			is_eating(t_philo *philo)
+int			is_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 1)
 		pthread_mutex_lock(philo->fr);
@@ -70,15 +70,33 @@ void			is_eating(t_philo *philo)
 	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
 	philo->cont_eats++;
+	if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
+	{
+		ft_usleep(philo->ttdie * 1000);
+		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+		philo->status = 1;
+		pthread_mutex_unlock(philo->fl);
+		pthread_mutex_unlock(philo->fr);
+		return (1);
+	}
 	ft_usleep(philo->tteat * 1000);
 	pthread_mutex_unlock(philo->fl);
 	pthread_mutex_unlock(philo->fr);
+	return (0);
 }
 
-void			is_sleeping(t_philo *philo)
+int			is_sleeping(t_philo *philo)
 {
 	printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
+	if (actual_time() + philo->ttsleep > philo->lmeal + philo->ttdie)
+	{
+		ft_usleep(philo->ttdie * 1000);
+		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+		philo->status = 1;
+		return 1 ;
+	}
 	ft_usleep(philo->ttsleep * 1000);
+	return (0);
 }
 
 void			*moni(void *tmp)
@@ -107,11 +125,31 @@ void			*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (philo->status != 1)
 	{
-		is_eating(philo);
-		
-		is_sleeping(philo);
-
-		printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
+		//if (actual_time() - philo->lmeal > philo->ttdie)
+/*		if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
+		{
+			ft_usleep(philo->ttdie * 1000);
+			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+			philo->status = 1;
+			break ;
+		}
+		else*/
+		if (1 == is_eating(philo))
+			break;
+//		if (actual_time() - philo->lmeal > philo->ttdie)
+/*		if (actual_time() + philo->ttsleep > philo->lmeal+ philo->ttdie)
+		{
+			ft_usleep(philo->ttdie * 1000);
+			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+			philo->status = 1;
+			break ;
+		}
+		else
+		{*/
+			if (1 == is_sleeping(philo))
+				break;
+			printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
+		//}
 	}
 	return (NULL);
 }
@@ -164,8 +202,20 @@ int				create_philos(t_var *var)
 		i += 2;
 	}
 	i = 0;
-	while (i < var->number_of_philosopher)
-		pthread_join(philo_nb[i++], NULL);
+//	while (i < var->number_of_philosopher)
+//		pthread_join(philo_nb[i++], NULL);
+	while (1)
+	{
+		ft_usleep(10); // que sea del mismo tiempo de muerte + 5ms
+		int k;
+
+		k = 0;
+		while (k < var->number_of_philosopher)
+		{
+			if (var->ph[k].status == 1)
+				return (1);
+		}
+	}
 	return (0);
 }
 
