@@ -65,25 +65,12 @@ int			is_eating(t_philo *philo)
 		pthread_mutex_lock(philo->fl);
 	else
 		pthread_mutex_lock(philo->fr);
-	if (actual_time() > philo->lmeal + philo->ttdie)
-	{
-		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
-		philo->status = 1;
-		return 1 ;
-	}
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
 	ft_usleep(philo->tteat * 1000);
 	philo->cont_eats++;
-	//if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
-//	if (actual_time() - philo->lmeal > philo->ttdie)
-
-//	printf("actu %lld\n", actual_time());
-//	printf("actu + ttat %lld\n", actual_time() + philo->tteat);
-//	printf("llmea %lld\n", philo->lmeal);
-//	printf("actu + ttat %lld\n", philo->lmeal + philo->ttdie);
 	pthread_mutex_unlock(philo->fl);
 	pthread_mutex_unlock(philo->fr);
 	return (0);
@@ -93,13 +80,7 @@ int			is_sleeping(t_philo *philo)
 {
 	printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
 	ft_usleep(philo->ttsleep * 1000);
-//	if (actual_time() - philo->lmeal > philo->ttdie)
-	if (actual_time() > philo->lmeal + philo->ttdie)
-	{
-		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
-		philo->status = 1;
-		return 1 ;
-	}
+	usleep(2);
 	return (0);
 }
 
@@ -127,33 +108,14 @@ void			*fa(void *tmp)
 	pthread_t	sta;
 
 	philo = (t_philo *)tmp;
-	while (philo->status != 1)
+	while (philo->status != 1 && philo->full != 1)
 	{
-		//if (actual_time() - philo->lmeal > philo->ttdie)
-/*		if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
-		{
-			ft_usleep(philo->ttdie * 1000);
-			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
-			philo->status = 1;
-			break ;
-		}
-		else*/
-		if (1 == is_eating(philo))
+		if (philo->full == 1 || 1 == is_eating(philo))
 			break;
-//		if (actual_time() - philo->lmeal > philo->ttdie)
-/*		if (actual_time() + philo->ttsleep > philo->lmeal+ philo->ttdie)
-		{
-			ft_usleep(philo->ttdie * 1000);
-			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
-			philo->status = 1;
-			break ;
-		}
-		else
-		{*/
-			if (1 == is_sleeping(philo))
-				break;
+		if (philo->full == 1 || 1 == is_sleeping(philo))
+			break;
+		if (philo->full != 1)
 			printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
-		//}
 	}
 	return (NULL);
 }
@@ -179,6 +141,7 @@ int				params_philo(t_var *var)
 		var->ph[i].fr = &var->forks[i];
 		var->ph[i].cont_eats = 0;
 		var->ph[i].status = 0;
+		var->ph[i].full = 0;
 		var->ph[i].lmeal = actual_time();
 	}
 	return (1);
@@ -207,18 +170,34 @@ int				create_philos(t_var *var)
 		i += 2;
 	}
 	i = 0;
-//	while (i < var->number_of_philosopher)
-//		pthread_join(philo_nb[i++], NULL);
+
+	int salida=0;
 	while (1)
 	{
-		ft_usleep(10); // que sea del mismo tiempo de muerte + 5ms
+		ft_usleep(10);
 		int k;
-
 		k = 0;
 		while (k < var->number_of_philosopher)
 		{
-			if (var->ph[k].status == 1)
+			if (var->notepmt)
+			{
+				if (var->ph[k].full != 1 && var->notepmt == var->ph[k].cont_eats)
+				{
+					printf("%lld %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+					var->ph[k].full = 1;
+					salida++;
+				}
+			}
+			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
+				var->ph[k].status = 1;
+			if (var->ph[k].full != 1 && var->ph[k].status == 1)
+			{
+				printf("%lld %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 				return (1);
+			}
+			k++;
+			if (salida == var->number_of_philosopher)
+				return (0);
 		}
 	}
 	return (0);
