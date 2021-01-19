@@ -65,21 +65,25 @@ int			is_eating(t_philo *philo)
 		pthread_mutex_lock(philo->fl);
 	else
 		pthread_mutex_lock(philo->fr);
+	if (actual_time() > philo->lmeal + philo->ttdie)
+	{
+		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+		philo->status = 1;
+		return 1 ;
+	}
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
-	philo->cont_eats++;
-	if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
-	{
-		ft_usleep(philo->ttdie * 1000);
-		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
-		philo->status = 1;
-		pthread_mutex_unlock(philo->fl);
-		pthread_mutex_unlock(philo->fr);
-		return (1);
-	}
 	ft_usleep(philo->tteat * 1000);
+	philo->cont_eats++;
+	//if (actual_time() + philo->tteat > philo->lmeal+ philo->ttdie)
+//	if (actual_time() - philo->lmeal > philo->ttdie)
+
+//	printf("actu %lld\n", actual_time());
+//	printf("actu + ttat %lld\n", actual_time() + philo->tteat);
+//	printf("llmea %lld\n", philo->lmeal);
+//	printf("actu + ttat %lld\n", philo->lmeal + philo->ttdie);
 	pthread_mutex_unlock(philo->fl);
 	pthread_mutex_unlock(philo->fr);
 	return (0);
@@ -88,14 +92,14 @@ int			is_eating(t_philo *philo)
 int			is_sleeping(t_philo *philo)
 {
 	printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
-	if (actual_time() + philo->ttsleep > philo->lmeal + philo->ttdie)
+	ft_usleep(philo->ttsleep * 1000);
+//	if (actual_time() - philo->lmeal > philo->ttdie)
+	if (actual_time() > philo->lmeal + philo->ttdie)
 	{
-		ft_usleep(philo->ttdie * 1000);
 		printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
 		philo->status = 1;
 		return 1 ;
 	}
-	ft_usleep(philo->ttsleep * 1000);
 	return (0);
 }
 
@@ -195,6 +199,7 @@ int				create_philos(t_var *var)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 		i += 2;
 	}
+	ft_usleep(2);
 	i = 1;
 	while (i < var->number_of_philosopher)
 	{
