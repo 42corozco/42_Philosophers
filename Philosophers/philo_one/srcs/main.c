@@ -65,9 +65,9 @@ int			is_eating(t_philo *philo)
 		pthread_mutex_lock(philo->fl);
 	else
 		pthread_mutex_lock(philo->fr);
-	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
-	printf("%lld %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
-	printf("%lld %d is eating\n", actual_time() - philo->ttinit, philo->id);
+	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
+	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
+	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
 	ft_usleep(philo->tteat * 1000);
 	philo->cont_eats++;
@@ -78,7 +78,7 @@ int			is_eating(t_philo *philo)
 
 int			is_sleeping(t_philo *philo)
 {
-	printf("%lld %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
+	printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
 	ft_usleep(philo->ttsleep * 1000);
 	usleep(2);
 	return (0);
@@ -93,7 +93,7 @@ void			*moni(void *tmp)
 	{
 		if (actual_time() - philo->lmeal > philo->ttdie)
 		{
-			printf("%lld %d dead\n", actual_time() - philo->ttinit, philo->id);
+			printf("%lldms %d dead\n", actual_time() - philo->ttinit, philo->id);
 			philo->status = 1;
 			exit(1);
 			break;
@@ -105,17 +105,17 @@ void			*moni(void *tmp)
 void			*fa(void *tmp)
 {
 	t_philo		*philo;
-	pthread_t	sta;
 
 	philo = (t_philo *)tmp;
 	while (philo->status != 1 && philo->full != 1)
 	{
 		if (philo->full == 1 || 1 == is_eating(philo))
 			break;
+		if (philo->lldms + philo->time_to_die)
 		if (philo->full == 1 || 1 == is_sleeping(philo))
 			break;
 		if (philo->full != 1)
-			printf("%lld %d is thinking\n", actual_time() - philo->ttinit, philo->id);
+			printf("%lldms %d is thinking\n", actual_time() - philo->ttinit, philo->id);
 	}
 	return (NULL);
 }
@@ -183,7 +183,7 @@ int				create_philos(t_var *var)
 			{
 				if (var->ph[k].full != 1 && var->notepmt == var->ph[k].cont_eats)
 				{
-					printf("%lld %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 					var->ph[k].full = 1;
 					salida++;
 				}
@@ -192,7 +192,7 @@ int				create_philos(t_var *var)
 				var->ph[k].status = 1;
 			if (var->ph[k].full != 1 && var->ph[k].status == 1)
 			{
-				printf("%lld %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 				return (1);
 			}
 			k++;
