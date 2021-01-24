@@ -20,16 +20,19 @@ int				ms_error(char *str)
 	return (write(2, "\n", 1));
 }
 
-pthread_mutex_t	*create_forks(int n)
+t_fork	*create_forks(int n)
 {
-	pthread_mutex_t		*tmp;
-	int					i;
+	t_fork		*tmp;
+	int			i;
 
-	if (!(tmp = malloc(sizeof(pthread_mutex_t) * n)))
+	if (!(tmp = malloc(sizeof(t_fork) * n)))
 		return (NULL);
 	i = 0;
 	while (i < n)
-		pthread_mutex_init(&tmp[i++], NULL);
+	{
+		pthread_mutex_init(&tmp[i].fork, NULL);
+		tmp[i++].id = -35;
+	}
 	return (tmp);
 }
 
@@ -37,7 +40,7 @@ int				parse_arg(t_var *var, int ac, char **av)
 {
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
-	if (!(var->forks = create_forks(var->number_of_philosopher)))
+	if (!(var->tforks = create_forks(var->number_of_philosopher)))
 		return (-1);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
 		return (1);
@@ -58,21 +61,41 @@ int				parse_arg(t_var *var, int ac, char **av)
 int			is_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 1)
-		pthread_mutex_lock(philo->fr);
+	{
+		while (philo->fr->id == philo->id)
+			ft_usleep(2);
+		pthread_mutex_lock(&philo->fr->fork);
+		philo->fr->id = philo->id;
+	}
 	else
-		pthread_mutex_lock(philo->fl);
+	{
+		while (philo->fl->id == philo->id)
+			ft_usleep(2);
+		pthread_mutex_lock(&philo->fl->fork);
+		philo->fl->id = philo->id;
+	}
 	if (philo->id % 2 == 1)
-		pthread_mutex_lock(philo->fl);
+	{
+		while (philo->fl->id == philo->id)
+			ft_usleep(2);
+		pthread_mutex_lock(&philo->fl->fork);
+		philo->fl->id = philo->id;
+	}
 	else
-		pthread_mutex_lock(philo->fr);
+	{
+		while (philo->fr->id == philo->id)
+			ft_usleep(2);
+		pthread_mutex_lock(&philo->fr->fork);
+		philo->fr->id = philo->id;
+	}
 	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
 	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
 	ft_usleep(philo->tteat * 1000);
 	philo->cont_eats++;
-	pthread_mutex_unlock(philo->fl);
-	pthread_mutex_unlock(philo->fr);
+	pthread_mutex_unlock(&philo->fl->fork);
+	pthread_mutex_unlock(&philo->fr->fork);
 	return (0);
 }
 
@@ -111,7 +134,6 @@ void			*fa(void *tmp)
 	{
 		if (philo->full == 1 || 1 == is_eating(philo))
 			break;
-		if (philo->lldms + philo->time_to_die)
 		if (philo->full == 1 || 1 == is_sleeping(philo))
 			break;
 		if (philo->full != 1)
@@ -135,10 +157,10 @@ int				params_philo(t_var *var)
 		var->ph[i].ttsleep = var->time_to_sleep;
 		var->ph[i].tteat = var->time_to_eat;
 		if (i == 0)
-			var->ph[i].fl = &var->forks[var->number_of_philosopher - 1];
+			var->ph[i].fl = &var->tforks[var->number_of_philosopher - 1];
 		else
-			var->ph[i].fl = &var->forks[i - 1];
-		var->ph[i].fr = &var->forks[i];
+			var->ph[i].fl = &var->tforks[i - 1];
+		var->ph[i].fr = &var->tforks[i];
 		var->ph[i].cont_eats = 0;
 		var->ph[i].status = 0;
 		var->ph[i].full = 0;
