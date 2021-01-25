@@ -205,8 +205,8 @@ int				create_philos(t_var *var)
 			{
 				if (var->ph[k].full != 1 && var->notepmt == var->ph[k].cont_eats)
 				{
-					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 					var->ph[k].full = 1;
+					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 					salida++;
 				}
 			}
