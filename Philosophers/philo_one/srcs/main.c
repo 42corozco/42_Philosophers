@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 11:11:06 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/26 11:54:37 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,49 @@ int				params_philo(t_var *var)
 	return (1);
 }
 
+void			monitor(t_var *var)
+{
+	int			salida;
+	int			k;
+
+	salida = 0;
+	while (1)
+	{
+		ft_usleep(10);
+		k = -1;
+		while (++k < var->number_of_philosopher)
+		{
+			if (var->notepmt && var->ph[k].full == 2)
+			{
+				printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+				salida++;
+				var->ph[k].full = 1;
+			}
+			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
+				var->ph[k].status = 1;
+			if (var->ph[k].full != 1 && var->ph[k].status == 1)
+			{
+				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+				return ;
+			}
+			if (salida == var->number_of_philosopher)
+				return ;
+		}
+	}
+}
+
 int				create_philos(t_var *var)
 {
 	pthread_t	*philo_nb;
 	int			i;
-	int			salida;
-	int			k;
 
 	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
 		return (-1);
 	if (!params_philo(var))
+	{
+		free(philo_nb);
 		return (-1);
+	}
 	i = 0;
 	while (i < var->number_of_philosopher)
 	{
@@ -93,39 +125,7 @@ int				create_philos(t_var *var)
 		i += 2;
 	}
 	i = 0;
-
-
-	salida = 0;
-	while (1)
-	{
-		ft_usleep(10);
-		k = 0;
-		while (k < var->number_of_philosopher)
-		{
-			if (var->notepmt)
-			{
-				if (var->ph[k].full == 2)
-				{
-					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-					salida++;
-					var->ph[k].full = 1;
-				}
-			}
-			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
-				var->ph[k].status = 1;
-			if (var->ph[k].full != 1 && var->ph[k].status == 1)
-			{
-				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-				return (1);
-			}
-			k++;
-			if (salida == var->number_of_philosopher)
-			{
-				free(philo_nb);
-				return (0);
-			}
-		}
-	}
+	monitor(var);
 	free(philo_nb);
 	return (0);
 }
@@ -139,7 +139,16 @@ int				main(int ac, char **av)
 		return (ms_error("Error: arguments"));
 	if (parse_arg(&var, ac, av))
 		return (ms_error("Error: parsing"));
-	create_philos(&var);
+	if (create_philos(&var) == -1)
+		return (ms_error("Error: malloc"));
+	free(var.tforks);
 	system("leaks philo_one");
 	return (0);
 }
+
+/*
+** hay 3 malloc
+** main.c:	if (!(var->ph = malloc(sizeof(t_philo) * var->number_of_philosopher)))
+** main.c:	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher))) ->free(philo) x2 c'est ok
+** parsing.c:	if (!(tmp = malloc(sizeof(t_fork) * n))) -> free(var.tforks) main.c c'est ok
+**/
