@@ -38,6 +38,7 @@ typedef struct		s_philo
 	int				cont_eats;
 	int				status;
 	int				full;
+	int				notepmt;
 }					t_philo;
 
 typedef struct		s_var

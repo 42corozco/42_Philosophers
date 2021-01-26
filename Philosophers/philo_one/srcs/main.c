@@ -107,24 +107,6 @@ int			is_sleeping(t_philo *philo)
 	return (0);
 }
 
-void			*moni(void *tmp)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)tmp;
-	while (philo->status != 1)
-	{
-		if (actual_time() - philo->lmeal > philo->ttdie)
-		{
-			printf("%lldms %d dead\n", actual_time() - philo->ttinit, philo->id);
-			philo->status = 1;
-			exit(1);
-			break;
-		}
-	}
-	return (NULL);
-}
-
 void			*fa(void *tmp)
 {
 	t_philo		*philo;
@@ -132,11 +114,13 @@ void			*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (philo->status != 1 && philo->full != 1)
 	{
-		if (philo->full == 1 || 1 == is_eating(philo))
+		if (philo->full > 0  || 1 == is_eating(philo))
 			break;
-		if (philo->full == 1 || 1 == is_sleeping(philo))
+		if (philo->cont_eats == philo->notepmt)
+			philo->full = 2;
+		if (philo->full > 0 || 1 == is_sleeping(philo))
 			break;
-		if (philo->full != 1)
+		if (philo->full < 1)
 			printf("%lldms %d is thinking\n", actual_time() - philo->ttinit, philo->id);
 	}
 	return (NULL);
@@ -164,6 +148,7 @@ int				params_philo(t_var *var)
 		var->ph[i].cont_eats = 0;
 		var->ph[i].status = 0;
 		var->ph[i].full = 0;
+		var->ph[i].notepmt = var->notepmt;
 		var->ph[i].lmeal = actual_time();
 	}
 	return (1);
@@ -203,11 +188,19 @@ int				create_philos(t_var *var)
 		{
 			if (var->notepmt)
 			{
+				/*
 				if (var->ph[k].full != 1 && var->notepmt == var->ph[k].cont_eats)
 				{
 					var->ph[k].full = 1;
 					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
 					salida++;
+				}
+				*/
+				if (var->ph[k].full == 2)
+				{
+					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+					salida++;
+					var->ph[k].full = 1;
 				}
 			}
 			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
