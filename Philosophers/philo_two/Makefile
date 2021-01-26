@@ -6,19 +6,27 @@
 #    By: corozco <????@????.???>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/03 02:02:47 by corozco           #+#    #+#              #
-#    Updated: 2020/12/03 02:30:29 by corozco          ###   ########.fr        #
+#    Updated: 2021/01/26 13:00:22 by corozco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo_two
-HEAD := -I./includes/ 
+HEAD := -I./includes/
 
 CFLAGS = -Wall -Wextra -Werror
+#CFLAGS =
 CFLAGSF = -g3 -fsanitize=address -Wall -Wextra -Werror
 
 
 SRC := \
-	srcs/main.c 
+	srcs/ft_atoi.c \
+	srcs/ft_strlen.c \
+	srcs/f_times.c \
+	srcs/is_eating.c \
+	srcs/is_sleeping.c \
+	srcs/parsing.c \
+	srcs/main.c
+
 
 OBJS = $(addprefix objs/, $(SRC:.c=.o))
 #color
