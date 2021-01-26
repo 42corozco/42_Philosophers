@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 11:03:50 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/26 11:11:06 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,13 @@ int				create_philos(t_var *var)
 			}
 			k++;
 			if (salida == var->number_of_philosopher)
+			{
+				free(philo_nb);
 				return (0);
+			}
 		}
 	}
+	free(philo_nb);
 	return (0);
 }
 
@@ -136,5 +140,6 @@ int				main(int ac, char **av)
 	if (parse_arg(&var, ac, av))
 		return (ms_error("Error: parsing"));
 	create_philos(&var);
+	system("leaks philo_one");
 	return (0);
 }
