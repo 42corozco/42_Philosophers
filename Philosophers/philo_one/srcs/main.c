@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/12 14:37:04 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/26 11:03:50 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,93 +20,6 @@ int				ms_error(char *str)
 	return (write(2, "\n", 1));
 }
 
-t_fork	*create_forks(int n)
-{
-	t_fork		*tmp;
-	int			i;
-
-	if (!(tmp = malloc(sizeof(t_fork) * n)))
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		pthread_mutex_init(&tmp[i].fork, NULL);
-		tmp[i++].id = -35;
-	}
-	return (tmp);
-}
-
-int				parse_arg(t_var *var, int ac, char **av)
-{
-	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
-		return (1);
-	if (!(var->tforks = create_forks(var->number_of_philosopher)))
-		return (-1);
-	if ((var->time_to_die = ft_atoi(av[2])) < 1)
-		return (1);
-	if ((var->time_to_eat = ft_atoi(av[3])) < 1)
-		return (1);
-	if ((var->time_to_sleep = ft_atoi(av[4])) < 1)
-		return (1);
-	if (ac == 6)
-	{
-		if ((var->notepmt = ft_atoi(av[5])) < 0)
-			return (1);
-	}
-	else
-		var->notepmt = 0;
-	return (0);
-}
-
-int			is_eating(t_philo *philo)
-{
-	if (philo->id % 2 == 1)
-	{
-		while (philo->fr->id == philo->id)
-			ft_usleep(2);
-		pthread_mutex_lock(&philo->fr->fork);
-		philo->fr->id = philo->id;
-	}
-	else
-	{
-		while (philo->fl->id == philo->id)
-			ft_usleep(2);
-		pthread_mutex_lock(&philo->fl->fork);
-		philo->fl->id = philo->id;
-	}
-	if (philo->id % 2 == 1)
-	{
-		while (philo->fl->id == philo->id)
-			ft_usleep(2);
-		pthread_mutex_lock(&philo->fl->fork);
-		philo->fl->id = philo->id;
-	}
-	else
-	{
-		while (philo->fr->id == philo->id)
-			ft_usleep(2);
-		pthread_mutex_lock(&philo->fr->fork);
-		philo->fr->id = philo->id;
-	}
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit, philo->id);
-	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
-	philo->lmeal = actual_time();
-	ft_usleep(philo->tteat * 1000);
-	philo->cont_eats++;
-	pthread_mutex_unlock(&philo->fl->fork);
-	pthread_mutex_unlock(&philo->fr->fork);
-	return (0);
-}
-
-int			is_sleeping(t_philo *philo)
-{
-	printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
-	ft_usleep(philo->ttsleep * 1000);
-	usleep(2);
-	return (0);
-}
-
 void			*fa(void *tmp)
 {
 	t_philo		*philo;
@@ -114,14 +27,15 @@ void			*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (philo->status != 1 && philo->full != 1)
 	{
-		if (philo->full > 0  || 1 == is_eating(philo))
-			break;
+		if (philo->full > 0 || 1 == is_eating(philo))
+			break ;
 		if (philo->cont_eats == philo->notepmt)
 			philo->full = 2;
 		if (philo->full > 0 || 1 == is_sleeping(philo))
-			break;
+			break ;
 		if (philo->full < 1)
-			printf("%lldms %d is thinking\n", actual_time() - philo->ttinit, philo->id);
+			printf("%lldms %d is thinking\n",
+				actual_time() - philo->ttinit, philo->id);
 	}
 	return (NULL);
 }
@@ -158,6 +72,8 @@ int				create_philos(t_var *var)
 {
 	pthread_t	*philo_nb;
 	int			i;
+	int			salida;
+	int			k;
 
 	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
 		return (-1);
@@ -178,24 +94,16 @@ int				create_philos(t_var *var)
 	}
 	i = 0;
 
-	int salida=0;
+
+	salida = 0;
 	while (1)
 	{
 		ft_usleep(10);
-		int k;
 		k = 0;
 		while (k < var->number_of_philosopher)
 		{
 			if (var->notepmt)
 			{
-				/*
-				if (var->ph[k].full != 1 && var->notepmt == var->ph[k].cont_eats)
-				{
-					var->ph[k].full = 1;
-					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-					salida++;
-				}
-				*/
 				if (var->ph[k].full == 2)
 				{
 					printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
@@ -220,7 +128,7 @@ int				create_philos(t_var *var)
 
 int				main(int ac, char **av)
 {
-	t_var	var;
+	t_var		var;
 
 	(void)ac;
 	if (ac < 5 || ac > 6)

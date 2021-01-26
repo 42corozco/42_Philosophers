@@ -6,7 +6,7 @@
 #    By: corozco <????@????.???>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/03 02:02:47 by corozco           #+#    #+#              #
-#    Updated: 2021/01/10 13:06:41 by corozco          ###   ########.fr        #
+#    Updated: 2021/01/26 10:48:47 by corozco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ SRC := \
 	srcs/ft_atoi.c \
 	srcs/ft_strlen.c \
 	srcs/f_times.c \
+	srcs/is_eating.c \
+	srcs/is_sleeping.c \
+	srcs/parsing.c \
 	srcs/main.c
 
 

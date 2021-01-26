@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.h                                            :+:      :+:    :+:   */
+/*   is_sleeping.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
+/*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:43:15 by corozco          ###   ########.fr       */
+/*   Created: 2021/01/26 10:44:40 by corozco           #+#    #+#             */
+/*   Updated: 2021/01/26 10:45:10 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOOLS_H
-# define TOOLS_H
+#include <stdio.h>
+#include "philo_one.h"
 
-int			ft_atoi(const char *str);
-int			ft_strlen(char *str);
-long long	actual_time(void);
-void		ft_usleep(unsigned int n);
-
-#endif
+int			is_sleeping(t_philo *philo)
+{
+	printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
+	ft_usleep(philo->ttsleep * 1000);
+	return (0);
+}
