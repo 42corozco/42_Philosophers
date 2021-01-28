@@ -6,11 +6,11 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 12:56:06 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:24:43 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/28 13:46:06 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 long long	actual_time(void)
 {

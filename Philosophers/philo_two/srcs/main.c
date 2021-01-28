@@ -6,13 +6,13 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 13:01:54 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/28 13:46:57 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <pthread.h>
-#include "philo_one.h"
+#include "philo_two.h"
 
 int				ms_error(char *str)
 {
@@ -142,7 +142,7 @@ int				main(int ac, char **av)
 	if (create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
 	free(var.tforks);
-	system("leaks philo_one");
+	system("leaks philo_two");
 	return (0);
 }
 

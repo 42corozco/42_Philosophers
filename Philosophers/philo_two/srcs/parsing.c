@@ -6,11 +6,11 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:46:45 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:57:13 by corozco          ###   ########.fr       */
+/*   Updated: 2021/01/28 13:46:36 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 static t_fork	*create_forks(int n)
 {
