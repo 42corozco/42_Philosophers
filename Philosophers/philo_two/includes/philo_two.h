@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/28 13:45:52 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/03 15:53:50 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@
 # include "tools.h"
 # include <stdlib.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <sys/time.h>
 # include <unistd.h>
-
+/*
 typedef struct		s_fork
 {
 	pthread_mutex_t	fork;
 	int				id;
 }					t_fork;
-
+*/
 typedef struct		s_philo
 {
 	int				id;
-	t_fork			*fl;
-	t_fork			*fr;
+//	t_fork			*fl;
+//	t_fork			*fr;
+	sem_t			**sem;
 	long long		ttinit;
 	long long		lmeal;
 	int				ttdie;
@@ -44,7 +46,8 @@ typedef struct		s_philo
 typedef struct		s_var
 {
 	int				number_of_philosopher;
-	t_fork			*tforks;
+//	t_fork			*tforks;
+	sem_t			*sem;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

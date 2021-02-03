@@ -6,12 +6,13 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/28 13:46:57 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/03 14:32:31 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <pthread.h>
+#include <semaphore.h>
 #include "philo_two.h"
 
 int				ms_error(char *str)
@@ -54,11 +55,12 @@ int				params_philo(t_var *var)
 		var->ph[i].ttdie = var->time_to_die;
 		var->ph[i].ttsleep = var->time_to_sleep;
 		var->ph[i].tteat = var->time_to_eat;
-		if (i == 0)
-			var->ph[i].fl = &var->tforks[var->number_of_philosopher - 1];
-		else
-			var->ph[i].fl = &var->tforks[i - 1];
-		var->ph[i].fr = &var->tforks[i];
+//		if (i == 0)
+//			var->ph[i].fl = &var->tforks[var->number_of_philosopher - 1];
+//		else
+//			var->ph[i].fl = &var->tforks[i - 1];
+//		var->ph[i].fr = &var->tforks[i];
+		var->ph[i].sem = &var->sem;
 		var->ph[i].cont_eats = 0;
 		var->ph[i].status = 0;
 		var->ph[i].full = 0;
@@ -126,6 +128,7 @@ int				create_philos(t_var *var)
 	}
 	i = 0;
 	monitor(var);
+	//hacer los join aqui.
 	free(philo_nb);
 	return (0);
 }
@@ -133,6 +136,8 @@ int				create_philos(t_var *var)
 int				main(int ac, char **av)
 {
 	t_var		var;
+	
+
 
 	(void)ac;
 	if (ac < 5 || ac > 6)
@@ -141,7 +146,7 @@ int				main(int ac, char **av)
 		return (ms_error("Error: parsing"));
 	if (create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
-	free(var.tforks);
+//	free(var.tforks);
 	system("leaks philo_two");
 	return (0);
 }

@@ -6,16 +6,17 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:46:45 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/28 13:46:36 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/03 15:53:54 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
-
+#include <semaphore.h>
+/*
 static t_fork	*create_forks(int n)
 {
 	t_fork		*tmp;
-	int			i;
+	int			i
 
 	if (!(tmp = malloc(sizeof(t_fork) * n)))
 		return (NULL);
@@ -27,12 +28,13 @@ static t_fork	*create_forks(int n)
 	}
 	return (tmp);
 }
-
+*/
 int				parse_arg(t_var *var, int ac, char **av)
 {
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
-	if (!(var->tforks = create_forks(var->number_of_philosopher)))
+	sem_unlink("/EAT");
+	if (SEM_FAILED == (var->sem = sem_open("/EAT", O_CREAT, S_IRWXU, var->number_of_philosopher)))
 		return (-1);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
 		return (1);
