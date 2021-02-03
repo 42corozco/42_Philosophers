@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 11:54:37 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/03 14:38:07 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int				main(int ac, char **av)
 	if (create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
 	free(var.tforks);
-	system("leaks philo_one");
+//	system("leaks philo_one");
 	return (0);
 }
 
