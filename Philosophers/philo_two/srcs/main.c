@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 14:32:31 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/04 09:32:10 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,16 +117,8 @@ int				create_philos(t_var *var)
 	while (i < var->number_of_philosopher)
 	{
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		i += 2;
+		i++;
 	}
-	ft_usleep(2);
-	i = 1;
-	while (i < var->number_of_philosopher)
-	{
-		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		i += 2;
-	}
-	i = 0;
 	monitor(var);
 	//hacer los join aqui.
 	free(philo_nb);
@@ -147,7 +139,7 @@ int				main(int ac, char **av)
 	if (create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
 //	free(var.tforks);
-	system("leaks philo_two");
+//	system("leaks philo_two");
 	return (0);
 }
 

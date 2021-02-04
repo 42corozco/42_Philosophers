@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:09:31 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 16:28:47 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/04 09:04:01 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int			is_eating(t_philo *philo)
 //	else
 //		check_fork(&philo->fr->id, philo->id, &philo->fr->fork);
 	sem_wait(*philo->sem);
-	sem_wait(*philo->sem);
 	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
 		philo->id);
 	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
@@ -41,6 +40,7 @@ int			is_eating(t_philo *philo)
 	philo->lmeal = actual_time();
 	ft_usleep(philo->tteat * 1000);
 	philo->cont_eats++;
+	sem_post(*philo->sem);
 //	pthread_mutex_unlock(&philo->fl->fork);
 //	pthread_mutex_unlock(&philo->fr->fork);
 	return (0);
