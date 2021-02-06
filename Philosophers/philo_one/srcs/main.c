@@ -127,6 +127,7 @@ int				create_philos(t_var *var)
 	i = 0;
 	monitor(var);
 	free(philo_nb);
+	free(var->ph);
 	return (0);
 }
 
