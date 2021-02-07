@@ -107,16 +107,18 @@ int				create_philos(t_var *var)
 		free(philo_nb);
 		return (-1);
 	}
-	i = 0;
-	while (i < var->number_of_philosopher)
-	{
+	i = -1;
+	while (++i < var->number_of_philosopher)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		i++;
-	}
 	monitor(var);
 	//hacer los join aqui.
-	free(philo_nb);
+	ft_usleep(50);
+	i = -1;
+	while (++i < var->number_of_philosopher)
+		 pthread_detach(philo_nb[i]);
 	free(var->ph);
+	free(philo_nb);
+	sem_close(var->sem);
 	return (0);
 }
 
