@@ -35,7 +35,7 @@ int				parse_arg(t_var *var, int ac, char **av)
 		return (1);
 	sem_unlink("/EAT");
 	if (SEM_FAILED == (var->sem = sem_open("/EAT", O_CREAT, S_IRWXU, var->number_of_philosopher / 2)))
-		return (-1);
+		return (2);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
 		return (1);
 	if ((var->time_to_eat = ft_atoi(av[3])) < 1)

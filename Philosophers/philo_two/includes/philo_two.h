@@ -18,19 +18,12 @@
 # include <pthread.h>
 # include <semaphore.h>
 # include <sys/time.h>
+# include <fcntl.h>
 # include <unistd.h>
-/*
-typedef struct		s_fork
-{
-	pthread_mutex_t	fork;
-	int				id;
-}					t_fork;
-*/
+
 typedef struct		s_philo
 {
 	int				id;
-//	t_fork			*fl;
-//	t_fork			*fr;
 	sem_t			**sem;
 	long long		ttinit;
 	long long		lmeal;
@@ -46,7 +39,6 @@ typedef struct		s_philo
 typedef struct		s_var
 {
 	int				number_of_philosopher;
-//	t_fork			*tforks;
 	sem_t			*sem;
 	int				time_to_die;
 	int				time_to_eat;

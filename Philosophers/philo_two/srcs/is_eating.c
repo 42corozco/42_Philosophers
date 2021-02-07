@@ -12,25 +12,9 @@
 
 #include <stdio.h>
 #include "philo_two.h"
-/*
-static void	check_fork(int *id, int philo, pthread_mutex_t *fork)
-{
-	while (*id == philo)
-		ft_usleep(2);
-	pthread_mutex_lock(fork);
-	*id = philo;
-}
-*/
+
 int			is_eating(t_philo *philo)
 {
-//	if (philo->id % 2 == 1)
-//		check_fork(&philo->fr->id, philo->id, &philo->fr->fork);
-//	else
-//		check_fork(&philo->fl->id, philo->id, &philo->fl->fork);
-//	if (philo->id % 2 == 1)
-//		check_fork(&philo->fl->id, philo->id, &philo->fl->fork);
-//	else
-//		check_fork(&philo->fr->id, philo->id, &philo->fr->fork);
 	sem_wait(*philo->sem);
 	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
 		philo->id);
@@ -41,7 +25,5 @@ int			is_eating(t_philo *philo)
 	ft_usleep(philo->tteat * 1000);
 	philo->cont_eats++;
 	sem_post(*philo->sem);
-//	pthread_mutex_unlock(&philo->fl->fork);
-//	pthread_mutex_unlock(&philo->fr->fork);
 	return (0);
 }
