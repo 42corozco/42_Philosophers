@@ -128,21 +128,22 @@ int				create_philos(t_var *var)
 	monitor(var);
 	free(philo_nb);
 	free(var->ph);
+	free(var->tforks);
 	return (0);
 }
 
 int				main(int ac, char **av)
 {
 	t_var		var;
+	int			error;
 
 	(void)ac;
 	if (ac < 5 || ac > 6)
 		return (ms_error("Error: arguments"));
-	if (parse_arg(&var, ac, av))
+	if ((error = parse_arg(&var, ac, av)) == 1)
 		return (ms_error("Error: parsing"));
-	if (create_philos(&var) == -1)
+	if (error == 2 || create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
-	free(var.tforks);
 //	system("leaks philo_one");
 	return (0);
 }

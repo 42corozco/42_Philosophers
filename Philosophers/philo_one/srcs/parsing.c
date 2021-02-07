@@ -12,6 +12,12 @@
 
 #include "philo_one.h"
 
+static int		error_fork(t_var *var)
+{
+	free(var->tforks);
+	return (1);
+}
+
 static t_fork	*create_forks(int n)
 {
 	t_fork		*tmp;
@@ -33,17 +39,17 @@ int				parse_arg(t_var *var, int ac, char **av)
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
 	if (!(var->tforks = create_forks(var->number_of_philosopher)))
-		return (-1);
+		return (2);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
-		return (1);
+		return (error_fork(var));
 	if ((var->time_to_eat = ft_atoi(av[3])) < 1)
-		return (1);
+		return (error_fork(var));
 	if ((var->time_to_sleep = ft_atoi(av[4])) < 1)
-		return (1);
+		return (error_fork(var));
 	if (ac == 6)
 	{
 		if ((var->notepmt = ft_atoi(av[5])) < 0)
-			return (1);
+			return (error_fork(var));
 	}
 	else
 		var->notepmt = 0;
