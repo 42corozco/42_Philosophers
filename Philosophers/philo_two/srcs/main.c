@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include <pthread.h>
-#include <semaphore.h>
 #include "philo_two.h"
 
 int				ms_error(char *str)
@@ -55,11 +54,6 @@ int				params_philo(t_var *var)
 		var->ph[i].ttdie = var->time_to_die;
 		var->ph[i].ttsleep = var->time_to_sleep;
 		var->ph[i].tteat = var->time_to_eat;
-//		if (i == 0)
-//			var->ph[i].fl = &var->tforks[var->number_of_philosopher - 1];
-//		else
-//			var->ph[i].fl = &var->tforks[i - 1];
-//		var->ph[i].fr = &var->tforks[i];
 		var->ph[i].sem = &var->sem;
 		var->ph[i].cont_eats = 0;
 		var->ph[i].status = 0;
@@ -122,6 +116,7 @@ int				create_philos(t_var *var)
 	monitor(var);
 	//hacer los join aqui.
 	free(philo_nb);
+	free(var->ph);
 	return (0);
 }
 
@@ -138,14 +133,5 @@ int				main(int ac, char **av)
 		return (ms_error("Error: semaphore"));
 	if (create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
-//	free(var.tforks);
-//	system("leaks philo_two");
 	return (0);
 }
-
-/*
-** hay 3 malloc
-** main.c:	if (!(var->ph = malloc(sizeof(t_philo) * var->number_of_philosopher)))
-** main.c:	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher))) ->free(philo) x2 c'est ok
-** parsing.c:	if (!(tmp = malloc(sizeof(t_fork) * n))) -> free(var.tforks) main.c c'est ok
-**/

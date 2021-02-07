@@ -11,24 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo_two.h"
-#include <semaphore.h>
-/*
-static t_fork	*create_forks(int n)
-{
-	t_fork		*tmp;
-	int			i
 
-	if (!(tmp = malloc(sizeof(t_fork) * n)))
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		pthread_mutex_init(&tmp[i].fork, NULL);
-		tmp[i++].id = -35;
-	}
-	return (tmp);
-}
-*/
 int				parse_arg(t_var *var, int ac, char **av)
 {
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
