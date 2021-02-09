@@ -27,13 +27,13 @@ void			*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (philo->status != 1 && philo->full != 1)
 	{
-		if (philo->full > 0 || 1 == is_eating(philo))
+		if (philo->full > 0 || philo->status ||1 == is_eating(philo))
 			break ;
 		if (philo->cont_eats == philo->notepmt)
 			philo->full = 2;
-		if (philo->full > 0 || 1 == is_sleeping(philo))
+		if (philo->full > 0 || philo->status || 1 == is_sleeping(philo))
 			break ;
-		if (philo->full < 1)
+		if (philo->full < 1 && !philo->status)
 			printf("%lldms %d is thinking\n",
 				actual_time() - philo->ttinit, philo->id);
 	}
@@ -87,6 +87,9 @@ void			monitor(t_var *var)
 			if (var->ph[k].full != 1 && var->ph[k].status == 1)
 			{
 				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+				k = -1;
+				while (++k < var->number_of_philosopher)
+					var->ph[k].status = 1;
 				return ;
 			}
 			if (salida == var->number_of_philosopher)
@@ -115,7 +118,7 @@ int				create_philos(t_var *var)
 	ft_usleep(50);
 	i = -1;
 	while (++i < var->number_of_philosopher)
-		 pthread_detach(philo_nb[i]);
+		 pthread_join(philo_nb[i], NULL);
 	free(var->ph);
 	free(philo_nb);
 	sem_close(var->sem);

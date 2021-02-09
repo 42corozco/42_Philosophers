@@ -16,14 +16,17 @@
 int			is_eating(t_philo *philo)
 {
 	sem_wait(*philo->sem);
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
-		philo->id);
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
-		philo->id);
-	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
-	philo->lmeal = actual_time();
-	ft_usleep(philo->tteat * 1000);
-	philo->cont_eats++;
+	if (!philo->status)
+	{
+		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
+				philo->id);
+		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
+				philo->id);
+		printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
+		philo->lmeal = actual_time();
+		ft_usleep(philo->tteat * 1000);
+		philo->cont_eats++;
+	}
 	sem_post(*philo->sem);
 	return (0);
 }
