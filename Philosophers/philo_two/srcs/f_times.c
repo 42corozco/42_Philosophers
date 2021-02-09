@@ -22,14 +22,19 @@ long long	actual_time(void)
 	return (mili);
 }
 
-void		ft_usleep(unsigned int n)
+//void		ft_usleep(unsigned int n)
+void		ft_usleep(unsigned int n, t_philo *th)
 {
 	struct timeval	start;
 	struct timeval	step;
+	int				no_null;
 
+	no_null = (th) ? 1 : 0;
 	gettimeofday(&start, NULL);
 	while (1)
 	{
+		if (no_null && th->status)
+			break ;
 		usleep(10);
 		gettimeofday(&step, NULL);
 		if ((size_t)(((size_t)(step.tv_sec - start.tv_sec)) * 1000000 +

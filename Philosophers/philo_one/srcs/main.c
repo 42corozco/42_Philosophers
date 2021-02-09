@@ -76,7 +76,7 @@ void			monitor(t_var *var)
 	salida = 0;
 	while (1)
 	{
-		ft_usleep(10);
+		ft_usleep(10, NULL);
 		k = -1;
 		while (++k < var->number_of_philosopher)
 		{
@@ -117,7 +117,7 @@ int				create_philos(t_var *var)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 		i += 2;
 	}
-	ft_usleep(2);
+	ft_usleep(2, NULL);
 	i = 1;
 	while (i < var->number_of_philosopher)
 	{

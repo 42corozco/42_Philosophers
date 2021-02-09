@@ -53,5 +53,6 @@ typedef struct		s_var
 int					is_eating(t_philo *philo);
 int					is_sleeping(t_philo *philo);
 int					parse_arg(t_var *var, int ac, char **av);
+void				ft_usleep(unsigned int n, t_philo *th);
 
 #endif

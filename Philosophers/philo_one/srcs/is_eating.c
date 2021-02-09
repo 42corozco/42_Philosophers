@@ -16,7 +16,7 @@
 static void	check_fork(int *id, int philo, pthread_mutex_t *fork)
 {
 	while (*id == philo)
-		ft_usleep(2);
+		ft_usleep(2, NULL); //tal vez toca enviarle el philo
 	pthread_mutex_lock(fork);
 	*id = philo;
 }
@@ -37,7 +37,7 @@ int			is_eating(t_philo *philo)
 		philo->id);
 	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
 	philo->lmeal = actual_time();
-	ft_usleep(philo->tteat * 1000);
+	ft_usleep(philo->tteat * 1000, philo);
 	philo->cont_eats++;
 	pthread_mutex_unlock(&philo->fl->fork);
 	pthread_mutex_unlock(&philo->fr->fork);

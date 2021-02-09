@@ -27,7 +27,7 @@ void			*fa(void *tmp)
 	philo = (t_philo *)tmp;
 	while (philo->status != 1 && philo->full != 1)
 	{
-		if (philo->full > 0 || philo->status ||1 == is_eating(philo))
+		if (philo->full > 0 || philo->status || 1 == is_eating(philo))
 			break ;
 		if (philo->cont_eats == philo->notepmt)
 			philo->full = 2;
@@ -72,7 +72,7 @@ void			monitor(t_var *var)
 	salida = 0;
 	while (1)
 	{
-		ft_usleep(10);
+		ft_usleep(10, NULL);
 		k = -1;
 		while (++k < var->number_of_philosopher)
 		{
@@ -115,7 +115,7 @@ int				create_philos(t_var *var)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 	monitor(var);
 	//hacer los join aqui.
-	ft_usleep(50);
+	ft_usleep(50, NULL);
 	i = -1;
 	while (++i < var->number_of_philosopher)
 		 pthread_join(philo_nb[i], NULL);

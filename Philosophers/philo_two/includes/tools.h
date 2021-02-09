@@ -16,6 +16,6 @@
 int			ft_atoi(const char *str);
 int			ft_strlen(char *str);
 long long	actual_time(void);
-void		ft_usleep(unsigned int n);
+//void		ft_usleep(unsigned int n);
 
 #endif
