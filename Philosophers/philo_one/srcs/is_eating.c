@@ -31,14 +31,17 @@ int			is_eating(t_philo *philo)
 		check_fork(&philo->fl->id, philo->id, &philo->fl->fork);
 	else
 		check_fork(&philo->fr->id, philo->id, &philo->fr->fork);
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
-		philo->id);
-	printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
-		philo->id);
-	printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
-	philo->lmeal = actual_time();
-	ft_usleep(philo->tteat * 1000, philo);
-	philo->cont_eats++;
+	if (!philo->status)
+	{
+		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
+			philo->id);
+		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
+			philo->id);
+		printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
+		philo->lmeal = actual_time();
+		ft_usleep(philo->tteat * 1000, philo);
+		philo->cont_eats++;
+	}
 	pthread_mutex_unlock(&philo->fl->fork);
 	pthread_mutex_unlock(&philo->fr->fork);
 	return (0);

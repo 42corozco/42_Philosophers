@@ -15,7 +15,10 @@
 
 int			is_sleeping(t_philo *philo)
 {
-	printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
-	ft_usleep(philo->ttsleep * 1000, philo);
+	if (!philo->status)
+	{
+		printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
+		ft_usleep(philo->ttsleep * 1000, philo);
+	}
 	return (0);
 }

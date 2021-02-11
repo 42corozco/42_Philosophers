@@ -31,9 +31,9 @@ void			*fa(void *tmp)
 			break ;
 		if (philo->cont_eats == philo->notepmt)
 			philo->full = 2;
-		if (philo->full > 0 || 1 == is_sleeping(philo))
+		if (philo->status || philo->full > 0 || 1 == is_sleeping(philo))
 			break ;
-		if (philo->full < 1)
+		if (philo->full < 1 && !philo->status)
 			printf("%lldms %d is thinking\n",
 				actual_time() - philo->ttinit, philo->id);
 	}
@@ -68,6 +68,8 @@ int				params_philo(t_var *var)
 	return (1);
 }
 
+
+
 void			monitor(t_var *var)
 {
 	int			salida;
@@ -91,6 +93,9 @@ void			monitor(t_var *var)
 			if (var->ph[k].full != 1 && var->ph[k].status == 1)
 			{
 				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
+				k = -1;
+				while (++k < var->number_of_philosopher)
+					var->ph[k].status = 1;
 				return ;
 			}
 			if (salida == var->number_of_philosopher)
@@ -126,6 +131,10 @@ int				create_philos(t_var *var)
 	}
 	i = 0;
 	monitor(var);
+	ft_usleep(50, NULL);
+	i = -1;
+	while (++i < var->number_of_philosopher)
+		 pthread_join(philo_nb[i], NULL);
 	free(philo_nb);
 	free(var->ph);
 	free(var->tforks);
