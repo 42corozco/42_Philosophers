@@ -114,7 +114,6 @@ int				create_philos(t_var *var)
 	while (++i < var->number_of_philosopher)
 		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
 	monitor(var);
-	//hacer los join aqui.
 	ft_usleep(50, NULL);
 	i = -1;
 	while (++i < var->number_of_philosopher)
