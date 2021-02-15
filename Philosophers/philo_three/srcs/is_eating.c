@@ -24,7 +24,8 @@ int			is_eating(t_philo *philo)
 				philo->id);
 		printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
 		philo->lmeal = actual_time();
-		ft_usleep(philo->tteat * 1000, philo);
+		//ft_usleep(philo->tteat * 1000, philo);
+		ft_usleep(philo->tteat * 1000);
 		philo->cont_eats++;
 	}
 	sem_post(*philo->sem);

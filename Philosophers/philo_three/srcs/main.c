@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <pthread.h>
 #include "philo_three.h"
+#include <sys/types.h>
+#include <unistd.h>
 
 int				ms_error(char *str)
 {
@@ -20,11 +22,9 @@ int				ms_error(char *str)
 	return (write(2, "\n", 1));
 }
 
-void			*fa(void *tmp)
+void		fa(t_philo *philo)
 {
-	t_philo		*philo;
-
-	philo = (t_philo *)tmp;
+	philo->ttinit = actual_time();
 	while (philo->status != 1 && philo->full != 1)
 	{
 		if (philo->full > 0 || philo->status || 1 == is_eating(philo))
@@ -35,9 +35,9 @@ void			*fa(void *tmp)
 			break ;
 		if (philo->full < 1 && !philo->status)
 			printf("%lldms %d is thinking\n",
-				actual_time() - philo->ttinit, philo->id);
+					actual_time() - philo->ttinit, philo->id);
 	}
-	return (NULL);
+	exit (1);
 }
 
 int				params_philo(t_var *var)
@@ -72,7 +72,8 @@ void			monitor(t_var *var)
 	salida = 0;
 	while (1)
 	{
-		ft_usleep(10, NULL);
+		//ft_usleep(10, NULL);
+		ft_usleep(10);
 		k = -1;
 		while (++k < var->number_of_philosopher)
 		{
@@ -98,28 +99,52 @@ void			monitor(t_var *var)
 	}
 }
 
+#include <sys/types.h>
+#include <sys/wait.h>
+
 int				create_philos(t_var *var)
 {
-	pthread_t	*philo_nb;
+	//	pthread_t	*philo_nb;
 	int			i;
+	int			status;
+	pid_t		f;
 
-	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
-		return (-1);
+	//	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher)))
+	//		return (-1);
 	if (!params_philo(var))
 	{
-		free(philo_nb);
+		//		free(philo_nb);
 		return (-1);
 	}
 	i = -1;
+	status = 0;
+	//while (!status && ++i < 2)
 	while (++i < var->number_of_philosopher)
-		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-	monitor(var);
-	ft_usleep(50, NULL);
+	//while (!status && ++i < var->number_of_philosopher)
+	{
+		if ((f = fork()) == 0)
+			fa(&var->ph[i]);
+	}
 	i = -1;
-	while (++i < var->number_of_philosopher)
-		 pthread_join(philo_nb[i], NULL);
+//	while (!status && ++i < var->number_of_philosopher)
+	while (1)
+	{
+		if ((f = waitpid(f, &status, WUNTRACED | WCONTINUED)) == -1)
+			printf("error\n");
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) > 0)
+				exit(1);
+		}
+	}
+	//		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
+	//	monitor(var);
+	//	ft_usleep(50, NULL);
+	//	i = -1;
+	//	while (++i < var->number_of_philosopher)
+	//		 pthread_join(philo_nb[i], NULL);
 	free(var->ph);
-	free(philo_nb);
+	//	free(philo_nb);
 	sem_close(var->sem);
 	return (0);
 }
