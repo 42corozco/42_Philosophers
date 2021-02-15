@@ -24,7 +24,7 @@ int				ms_error(char *str)
 
 void		fa(t_philo *philo)
 {
-	philo->ttinit = actual_time();
+//	philo->ttinit = actual_time();
 	while (philo->status != 1 && philo->full != 1)
 	{
 		if (philo->full > 0 || philo->status || 1 == is_eating(philo))
