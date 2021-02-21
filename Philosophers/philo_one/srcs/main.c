@@ -68,8 +68,6 @@ int				params_philo(t_var *var)
 	return (1);
 }
 
-
-
 void			monitor(t_var *var)
 {
 	int			salida;
@@ -153,13 +151,5 @@ int				main(int ac, char **av)
 		return (ms_error("Error: parsing"));
 	if (error == 2 || create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
-//	system("leaks philo_one");
 	return (0);
 }
-
-/*
-** hay 3 malloc
-** main.c:	if (!(var->ph = malloc(sizeof(t_philo) * var->number_of_philosopher)))
-** main.c:	if (!(philo_nb = malloc(sizeof(pthread_t) * var->number_of_philosopher))) ->free(philo) x2 c'est ok
-** parsing.c:	if (!(tmp = malloc(sizeof(t_fork) * n))) -> free(var.tforks) main.c c'est ok
-**/

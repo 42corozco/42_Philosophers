@@ -21,25 +21,29 @@
 # include <fcntl.h>
 # include <unistd.h>
 
+int					g_status;
+
 typedef struct		s_philo
 {
 	int				id;
 	sem_t			**sem;
+	sem_t			**write;
 	long long		ttinit;
 	long long		lmeal;
 	int				ttdie;
 	int				tteat;
 	int				ttsleep;
 	int				cont_eats;
-	int				status;
 	int				full;
 	int				notepmt;
+	int				pid;
 }					t_philo;
 
 typedef struct		s_var
 {
 	int				number_of_philosopher;
 	sem_t			*sem;
+	sem_t			*write;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

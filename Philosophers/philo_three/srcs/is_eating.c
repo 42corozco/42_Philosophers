@@ -16,13 +16,15 @@
 int			is_eating(t_philo *philo)
 {
 	sem_wait(*philo->sem);
-	if (!philo->status)
+	if (!g_status)
 	{
+		sem_wait(*philo->write);
 		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
 				philo->id);
 		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
 				philo->id);
 		printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
+		sem_post(*philo->write);
 		philo->lmeal = actual_time();
 		//ft_usleep(philo->tteat * 1000, philo);
 		ft_usleep(philo->tteat * 1000);
