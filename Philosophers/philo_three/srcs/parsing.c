@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:46:45 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/04 09:03:40 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/23 12:31:41 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int				parse_arg(t_var *var, int ac, char **av)
 	sem_unlink("/WRITE");
 	if (SEM_FAILED == (var->sem = sem_open("/EAT", O_CREAT, S_IRWXU, var->number_of_philosopher / 2)))
 		return (2);
-	if (SEM_FAILED == (var->write = sem_open("/WRITE", O_CREAT, S_IRWXU, 2)))
+	if (SEM_FAILED == (var->write = sem_open("/WRITE", O_CREAT, S_IRWXU, 1)))
 		return (2);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
 		return (error_sem(var));

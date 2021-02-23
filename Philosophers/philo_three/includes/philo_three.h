@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 15:53:50 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/23 12:26:59 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/time.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <signal.h>
 
 int					g_status;
 

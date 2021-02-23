@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/04 09:32:10 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/23 12:34:54 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ void		*fath(void *tmp)
 	philo = (t_philo *)tmp;
 	while (1)
 	{
-		if (actual_time() > philo->lmeal + philo->ttdie)
+		if (philo->full == 2)
+			break ;
+		if (philo->full != 2 && actual_time() > philo->lmeal + philo->ttdie)
 		{
 			g_status = 1;
-			sem_wait(*philo->write);
 			sem_wait(*philo->write);
 			printf("%lldms %d dead\n", actual_time() - philo->ttinit, philo->id);
 			break ;
