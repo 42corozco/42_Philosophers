@@ -64,10 +64,11 @@ void		fa(t_philo *philo)
 		}
 	}
 	pthread_join(philo_thread, NULL);
+	sem_close(*philo->write);
+	sem_close(*philo->sem);
 	if (g_status)
-		exit(0);
+		return ;
 	printf("%lldms %d full\n", actual_time() - philo->ttinit, philo->id);
-	exit (1);
 }
 
 int				params_philo(t_var *var)
@@ -109,7 +110,13 @@ int				create_philos(t_var *var)
 	while (++i < var->number_of_philosopher)
 	{
 		if ((var->ph[i].pid = fork()) == 0)
+		{
 			fa(&var->ph[i]);
+			free(var->ph);
+			if (g_status)
+				exit(0);
+			exit(1);
+		}
 	}
 	i = 0;
 	int k = -1;
@@ -131,20 +138,16 @@ int				create_philos(t_var *var)
 				while (++k < var->number_of_philosopher)
 					kill(var->ph[k].pid, SIGINT);
 				free(var->ph);
-				sem_unlink("/EAT");
-				sem_unlink("/WRITE");
-				sem_close(var->sem);
-				sem_close(var->write);
+				sem_unlink("/eat");
+				sem_unlink("/write");
 				return (0);
 			}
 		}
 	}
 	usleep(100000);
 	free(var->ph);
-	sem_unlink("/EAT");
-	sem_unlink("/WRITE");
-	sem_close(var->sem);
-	sem_close(var->write);
+	sem_unlink("/eat");
+	sem_unlink("/write");
 	return (0);
 }
 

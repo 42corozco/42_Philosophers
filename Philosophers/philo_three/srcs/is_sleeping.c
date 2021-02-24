@@ -21,7 +21,6 @@ int			is_sleeping(t_philo *philo)
 		printf("%lldms %d is sleeping\n", actual_time() - philo->ttinit, philo->id);
 		sem_post(*philo->write);
 		ft_usleep(philo->ttsleep * 1000);
-		//ft_usleep(philo->ttsleep * 1000, philo);
 	}
 	return (0);
 }

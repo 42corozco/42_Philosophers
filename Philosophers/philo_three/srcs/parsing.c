@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo_three.h"
+#include <string.h>
 
 static int		error_sem(t_var *var)
 {
@@ -22,11 +23,13 @@ int				parse_arg(t_var *var, int ac, char **av)
 {
 	if ((var->number_of_philosopher = ft_atoi(av[1])) < 2)
 		return (1);
-	sem_unlink("/EAT");
-	sem_unlink("/WRITE");
-	if (SEM_FAILED == (var->sem = sem_open("/EAT", O_CREAT, S_IRWXU, var->number_of_philosopher / 2)))
+	sem_unlink("/eat");
+	sem_unlink("/write");
+	memset(&var->sem, 0, sizeof(var->sem));
+	if (SEM_FAILED == (var->sem = sem_open("/eat", O_CREAT, S_IRWXU, var->number_of_philosopher / 2)))
 		return (2);
-	if (SEM_FAILED == (var->write = sem_open("/WRITE", O_CREAT, S_IRWXU, 1)))
+	memset(&var->write, 0, sizeof(var->write));
+	if (SEM_FAILED == (var->write = sem_open("/write", O_CREAT, S_IRWXU, 1)))
 		return (2);
 	if ((var->time_to_die = ft_atoi(av[2])) < 1)
 		return (error_sem(var));
