@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/23 12:34:54 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/24 12:15:32 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,8 @@ int				create_philos(t_var *var)
 			{
 				k = -1;
 				while (++k < var->number_of_philosopher)
-				{
 					kill(var->ph[k].pid, SIGINT);
-				}
-				exit(0);
+				g_status = 1;
 			}
 		}
 	}
