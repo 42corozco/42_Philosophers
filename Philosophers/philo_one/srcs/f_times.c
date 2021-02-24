@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 12:56:06 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:24:43 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:25:58 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,15 @@ long long	actual_time(void)
 	return (mili);
 }
 
-//void		ft_usleep(unsigned int n)
 void		ft_usleep(unsigned int n, t_philo *th)
 {
 	struct timeval	start;
 	struct timeval	step;
 	int				no_null;
 
-	no_null = (th) ? 1 : 0;
+	no_null = 0;
+	if (th)
+		no_null = 1;
 	gettimeofday(&start, NULL);
 	while (1)
 	{

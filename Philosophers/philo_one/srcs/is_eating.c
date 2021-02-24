@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:09:31 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:41:44 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:28:13 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	check_fork(int *id, int philo, pthread_mutex_t *fork)
 {
 	while (*id == philo)
-		ft_usleep(2, NULL); //tal vez toca enviarle el philo
+		ft_usleep(2, NULL);
 	pthread_mutex_lock(fork);
 	*id = philo;
 }
@@ -37,7 +37,8 @@ int			is_eating(t_philo *philo)
 			philo->id);
 		printf("%lldms %d as taken a fork\n", actual_time() - philo->ttinit,
 			philo->id);
-		printf("%lldms %d is eating\n", actual_time() - philo->ttinit, philo->id);
+		printf("%lldms %d is eating\n", actual_time() - philo->ttinit,
+			philo->id);
 		philo->lmeal = actual_time();
 		ft_usleep(philo->tteat * 1000, philo);
 		philo->cont_eats++;

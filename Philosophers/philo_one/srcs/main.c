@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 14:38:07 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/24 11:29:12 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int				create_philos(t_var *var)
 	ft_usleep(50, NULL);
 	i = -1;
 	while (++i < var->number_of_philosopher)
-		 pthread_join(philo_nb[i], NULL);
+		pthread_join(philo_nb[i], NULL);
 	free(philo_nb);
 	free(var->ph);
 	free(var->tforks);
