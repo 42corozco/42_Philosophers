@@ -68,37 +68,65 @@ int				params_philo(t_var *var)
 	return (1);
 }
 
+int				full_or_deat(t_var *var, int *k, int *ret)
+{
+	if (var->notepmt && var->ph[*k].full == 2)
+	{
+		printf("%lldms %d full\n", actual_time() - var->ph[*k].ttinit,
+			var->ph[*k].id);
+		(*ret)++;
+		var->ph[*k].full = 1;
+	}
+	if (actual_time() > var->ph[*k].lmeal + var->ph[*k].ttdie)
+		var->ph[*k].status = 1;
+	if (var->ph[*k].full != 1 && var->ph[*k].status == 1)
+	{
+		printf("%lldms %d dead\n", actual_time() - var->ph[*k].ttinit,
+			var->ph[*k].id);
+		*k = -1;
+		while (++(*k) < var->number_of_philosopher)
+			var->ph[*k].status = 1;
+		return (1);
+	}
+	return (0);
+}
+
 void			monitor(t_var *var)
 {
-	int			salida;
+	int			ret;
 	int			k;
 
-	salida = 0;
+	ret = 0;
 	while (1)
 	{
 		ft_usleep(10, NULL);
 		k = -1;
 		while (++k < var->number_of_philosopher)
 		{
-			if (var->notepmt && var->ph[k].full == 2)
-			{
-				printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-				salida++;
-				var->ph[k].full = 1;
-			}
-			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
-				var->ph[k].status = 1;
-			if (var->ph[k].full != 1 && var->ph[k].status == 1)
-			{
-				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-				k = -1;
-				while (++k < var->number_of_philosopher)
-					var->ph[k].status = 1;
+			if (full_or_deat(var, &k, &ret))
 				return ;
-			}
-			if (salida == var->number_of_philosopher)
+			if (ret == var->number_of_philosopher)
 				return ;
 		}
+	}
+}
+
+void			create_phread_philo(t_var *var, pthread_t *philo_nb)
+{
+	int			i;
+
+	i = 0;
+	while (i < var->number_of_philosopher)
+	{
+		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
+		i += 2;
+	}
+	ft_usleep(2, NULL);
+	i = 1;
+	while (i < var->number_of_philosopher)
+	{
+		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
+		i += 2;
 	}
 }
 
@@ -114,20 +142,7 @@ int				create_philos(t_var *var)
 		free(philo_nb);
 		return (-1);
 	}
-	i = 0;
-	while (i < var->number_of_philosopher)
-	{
-		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		i += 2;
-	}
-	ft_usleep(2, NULL);
-	i = 1;
-	while (i < var->number_of_philosopher)
-	{
-		pthread_create(&philo_nb[i], NULL, fa, &var->ph[i]);
-		i += 2;
-	}
-	i = 0;
+	create_phread_philo(var, philo_nb);
 	monitor(var);
 	ft_usleep(50, NULL);
 	i = -1;
