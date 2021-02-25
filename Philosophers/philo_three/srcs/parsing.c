@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:46:45 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/23 12:31:41 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:11:29 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int				parse_arg(t_var *var, int ac, char **av)
 	sem_unlink("/eat");
 	sem_unlink("/write");
 	memset(&var->sem, 0, sizeof(var->sem));
-	if (SEM_FAILED == (var->sem = sem_open("/eat", O_CREAT, S_IRWXU, var->number_of_philosopher / 2)))
+	if (SEM_FAILED == (var->sem = sem_open("/eat", O_CREAT, S_IRWXU,
+		var->number_of_philosopher / 2)))
 		return (2);
 	memset(&var->write, 0, sizeof(var->write));
 	if (SEM_FAILED == (var->write = sem_open("/write", O_CREAT, S_IRWXU, 1)))

@@ -6,23 +6,13 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/24 12:18:31 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:17:01 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <pthread.h>
 #include "philo_three.h"
-#include <sys/types.h>
-#include <unistd.h>
 
-int				ms_error(char *str)
-{
-	write(2, str, ft_strlen(str));
-	return (write(2, "\n", 1));
-}
-
-void		*fath(void *tmp)
+void			*monitor(void *tmp)
 {
 	t_philo *philo;
 
@@ -35,18 +25,19 @@ void		*fath(void *tmp)
 		{
 			g_status = 1;
 			sem_wait(*philo->write);
-			printf("%lldms %d dead\n", actual_time() - philo->ttinit, philo->id);
+			printf("%lldms %d dead\n", actual_time() - philo->ttinit,
+				philo->id);
 			break ;
 		}
 	}
 	return (NULL);
 }
 
-void		fa(t_philo *philo)
+void			fa(t_philo *philo)
 {
 	pthread_t	philo_thread;
 
-	pthread_create(&philo_thread, NULL, fath, philo);
+	pthread_create(&philo_thread, NULL, monitor, philo);
 	while (g_status != 1 && philo->full != 1)
 	{
 		if (philo->full > 0 || g_status || 1 == is_eating(philo))
@@ -94,9 +85,6 @@ int				params_philo(t_var *var)
 	}
 	return (1);
 }
-
-#include <sys/types.h>
-#include <sys/wait.h>
 
 int				create_philos(t_var *var)
 {

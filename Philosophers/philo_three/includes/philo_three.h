@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/24 11:07:33 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:09:17 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <semaphore.h>
-# include <sys/time.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <signal.h>
+# include <stdio.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/time.h>
 
 int					g_status;
 
@@ -58,6 +61,5 @@ typedef struct		s_var
 int					is_eating(t_philo *philo);
 int					is_sleeping(t_philo *philo);
 int					parse_arg(t_var *var, int ac, char **av);
-//void				ft_usleep(unsigned int n, t_philo *th);
 
 #endif

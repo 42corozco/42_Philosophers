@@ -6,11 +6,17 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 12:56:06 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/24 11:07:53 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:12:36 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
+
+int			ms_error(char *str)
+{
+	write(2, str, ft_strlen(str));
+	return (write(2, "\n", 1));
+}
 
 long long	actual_time(void)
 {
