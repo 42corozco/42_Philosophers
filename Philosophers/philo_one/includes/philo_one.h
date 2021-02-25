@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:48:30 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:52:59 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <stdio.h>
 
 typedef struct		s_fork
 {
@@ -59,5 +60,6 @@ int					is_eating(t_philo *philo);
 int					is_sleeping(t_philo *philo);
 int					parse_arg(t_var *var, int ac, char **av);
 void				ft_usleep(unsigned int n, t_philo *th);
+void				monitor(t_var *var);
 
 #endif

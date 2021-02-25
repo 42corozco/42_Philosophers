@@ -6,11 +6,10 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:09:31 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/24 11:28:13 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:52:33 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "philo_one.h"
 
 static void	check_fork(int *id, int philo, pthread_mutex_t *fork)

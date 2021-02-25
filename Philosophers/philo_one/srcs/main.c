@@ -6,19 +6,11 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/24 11:29:12 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:54:53 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <pthread.h>
 #include "philo_one.h"
-
-int				ms_error(char *str)
-{
-	write(2, str, ft_strlen(str));
-	return (write(2, "\n", 1));
-}
 
 void			*fa(void *tmp)
 {
@@ -66,49 +58,6 @@ int				params_philo(t_var *var)
 		var->ph[i].lmeal = actual_time();
 	}
 	return (1);
-}
-
-int				full_or_deat(t_var *var, int *k, int *ret)
-{
-	if (var->notepmt && var->ph[*k].full == 2)
-	{
-		printf("%lldms %d full\n", actual_time() - var->ph[*k].ttinit,
-			var->ph[*k].id);
-		(*ret)++;
-		var->ph[*k].full = 1;
-	}
-	if (actual_time() > var->ph[*k].lmeal + var->ph[*k].ttdie)
-		var->ph[*k].status = 1;
-	if (var->ph[*k].full != 1 && var->ph[*k].status == 1)
-	{
-		printf("%lldms %d dead\n", actual_time() - var->ph[*k].ttinit,
-			var->ph[*k].id);
-		*k = -1;
-		while (++(*k) < var->number_of_philosopher)
-			var->ph[*k].status = 1;
-		return (1);
-	}
-	return (0);
-}
-
-void			monitor(t_var *var)
-{
-	int			ret;
-	int			k;
-
-	ret = 0;
-	while (1)
-	{
-		ft_usleep(10, NULL);
-		k = -1;
-		while (++k < var->number_of_philosopher)
-		{
-			if (full_or_deat(var, &k, &ret))
-				return ;
-			if (ret == var->number_of_philosopher)
-				return ;
-		}
-	}
 }
 
 void			create_phread_philo(t_var *var, pthread_t *philo_nb)
