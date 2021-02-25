@@ -6,19 +6,11 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/04 09:32:10 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:01:24 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <pthread.h>
 #include "philo_two.h"
-
-int				ms_error(char *str)
-{
-	write(2, str, ft_strlen(str));
-	return (write(2, "\n", 1));
-}
 
 void			*fa(void *tmp)
 {
@@ -64,40 +56,6 @@ int				params_philo(t_var *var)
 	return (1);
 }
 
-void			monitor(t_var *var)
-{
-	int			salida;
-	int			k;
-
-	salida = 0;
-	while (1)
-	{
-		ft_usleep(10, NULL);
-		k = -1;
-		while (++k < var->number_of_philosopher)
-		{
-			if (var->notepmt && var->ph[k].full == 2)
-			{
-				printf("%lldms %d full\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-				salida++;
-				var->ph[k].full = 1;
-			}
-			if (actual_time() > var->ph[k].lmeal + var->ph[k].ttdie)
-				var->ph[k].status = 1;
-			if (var->ph[k].full != 1 && var->ph[k].status == 1)
-			{
-				printf("%lldms %d dead\n", actual_time() - var->ph[k].ttinit, var->ph[k].id);
-				k = -1;
-				while (++k < var->number_of_philosopher)
-					var->ph[k].status = 1;
-				return ;
-			}
-			if (salida == var->number_of_philosopher)
-				return ;
-		}
-	}
-}
-
 int				create_philos(t_var *var)
 {
 	pthread_t	*philo_nb;
@@ -117,7 +75,7 @@ int				create_philos(t_var *var)
 	ft_usleep(50, NULL);
 	i = -1;
 	while (++i < var->number_of_philosopher)
-		 pthread_join(philo_nb[i], NULL);
+		pthread_join(philo_nb[i], NULL);
 	free(var->ph);
 	free(philo_nb);
 	sem_close(var->sem);

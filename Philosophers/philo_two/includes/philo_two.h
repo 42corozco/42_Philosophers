@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 15:53:50 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:59:44 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/time.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <stdio.h>
 
 typedef struct		s_philo
 {
@@ -54,5 +55,6 @@ int					is_eating(t_philo *philo);
 int					is_sleeping(t_philo *philo);
 int					parse_arg(t_var *var, int ac, char **av);
 void				ft_usleep(unsigned int n, t_philo *th);
+void				monitor(t_var *var);
 
 #endif

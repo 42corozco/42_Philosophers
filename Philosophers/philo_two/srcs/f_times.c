@@ -6,11 +6,17 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 12:56:06 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/03 16:10:51 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 13:00:17 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+
+int			ms_error(char *str)
+{
+	write(2, str, ft_strlen(str));
+	return (write(2, "\n", 1));
+}
 
 long long	actual_time(void)
 {
@@ -22,14 +28,15 @@ long long	actual_time(void)
 	return (mili);
 }
 
-//void		ft_usleep(unsigned int n)
 void		ft_usleep(unsigned int n, t_philo *th)
 {
 	struct timeval	start;
 	struct timeval	step;
 	int				no_null;
 
-	no_null = (th) ? 1 : 0;
+	no_null = 0;
+	if (th)
+		no_null = 1;
 	gettimeofday(&start, NULL);
 	while (1)
 	{
