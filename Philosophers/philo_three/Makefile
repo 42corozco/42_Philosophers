@@ -6,7 +6,7 @@
 #    By: corozco <????@????.???>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/03 02:02:47 by corozco           #+#    #+#              #
-#    Updated: 2021/01/26 13:00:22 by corozco          ###   ########.fr        #
+#    Updated: 2021/02/25 14:33:54 by corozco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC := \
 	srcs/is_eating.c \
 	srcs/is_sleeping.c \
 	srcs/parsing.c \
+	srcs/create_philos.c \
 	srcs/main.c
 
 

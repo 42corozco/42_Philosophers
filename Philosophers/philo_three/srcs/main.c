@@ -6,15 +6,15 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/25 13:17:01 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 14:34:24 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-void			*monitor(void *tmp)
+static void		*monitor(void *tmp)
 {
-	t_philo *philo;
+	t_philo		*philo;
 
 	philo = (t_philo *)tmp;
 	while (1)
@@ -60,83 +60,6 @@ void			fa(t_philo *philo)
 	if (g_status)
 		return ;
 	printf("%lldms %d full\n", actual_time() - philo->ttinit, philo->id);
-}
-
-int				params_philo(t_var *var)
-{
-	int			i;
-
-	i = -1;
-	if (!(var->ph = malloc(sizeof(t_philo) * var->number_of_philosopher)))
-		return (0);
-	while (++i < var->number_of_philosopher)
-	{
-		var->ph[i].id = i + 1;
-		var->ph[i].ttinit = actual_time();
-		var->ph[i].ttdie = var->time_to_die;
-		var->ph[i].ttsleep = var->time_to_sleep;
-		var->ph[i].tteat = var->time_to_eat;
-		var->ph[i].sem = &var->sem;
-		var->ph[i].write = &var->write;
-		var->ph[i].cont_eats = 0;
-		var->ph[i].full = 0;
-		var->ph[i].notepmt = var->notepmt;
-		var->ph[i].lmeal = actual_time();
-	}
-	return (1);
-}
-
-int				create_philos(t_var *var)
-{
-	int			i;
-	int			status;
-
-	if (!params_philo(var))
-		return (-1);
-	i = -1;
-	status = 0;
-	while (++i < var->number_of_philosopher)
-	{
-		if ((var->ph[i].pid = fork()) == 0)
-		{
-			fa(&var->ph[i]);
-			free(var->ph);
-			if (g_status)
-				exit(0);
-			exit(1);
-		}
-	}
-	i = 0;
-	int k = -1;
-	while (!g_status && ++k < var->number_of_philosopher)
-	{
-		if (waitpid(-1, &status, 0) < 0)
-			printf("Error new.\n");
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) == 1)
-			{
-				i++;
-				if (i == var->number_of_philosopher)
-					printf("todos comieron\n");
-			}
-			if (WEXITSTATUS(status) == 0)
-			{
-				k = -1;
-				while (++k < var->number_of_philosopher)
-					kill(var->ph[k].pid, SIGINT);
-				free(var->ph);
-				sem_unlink("/eat");
-				sem_unlink("/write");
-				return (0);
-			}
-		}
-	}
-	usleep(100000);
-	free(var->ph);
-	sem_unlink("/eat");
-	sem_unlink("/write");
-	return (0);
 }
 
 int				main(int ac, char **av)

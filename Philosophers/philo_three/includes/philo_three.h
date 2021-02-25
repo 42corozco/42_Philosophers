@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 13:30:14 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/25 13:09:17 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 14:34:42 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,7 @@ typedef struct		s_var
 int					is_eating(t_philo *philo);
 int					is_sleeping(t_philo *philo);
 int					parse_arg(t_var *var, int ac, char **av);
+int					create_philos(t_var *var);
+void				fa(t_philo *philo);
 
 #endif
