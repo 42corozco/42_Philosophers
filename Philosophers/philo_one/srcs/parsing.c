@@ -6,7 +6,7 @@
 /*   By: corozco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 10:46:45 by corozco           #+#    #+#             */
-/*   Updated: 2021/01/26 10:57:13 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 15:49:27 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int				parse_arg(t_var *var, int ac, char **av)
 	{
 		if ((var->notepmt = ft_atoi(av[5])) < 0)
 			return (error_fork(var));
+		if (var->notepmt == 0)
+			return (2 + error_fork(var));
 	}
 	else
 		var->notepmt = 0;
