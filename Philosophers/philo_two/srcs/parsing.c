@@ -36,6 +36,8 @@ int				parse_arg(t_var *var, int ac, char **av)
 	{
 		if ((var->notepmt = ft_atoi(av[5])) < 0)
 			return (error_sem(var));
+		if (var->notepmt == 0)
+			return (2 + error_sem(var));
 	}
 	else
 		var->notepmt = 0;

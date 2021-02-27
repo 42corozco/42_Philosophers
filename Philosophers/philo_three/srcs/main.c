@@ -72,6 +72,8 @@ int				main(int ac, char **av)
 	g_status = 0;
 	if ((error = parse_arg(&var, ac, av)) == 1)
 		return (ms_error("Error: parsing"));
+	if (error == 3)
+		return (ms_error("Error: the philosophers aren't happy"));
 	if (error == 2)
 		return (ms_error("Error: semaphore"));
 	if (create_philos(&var) == -1)

@@ -49,7 +49,7 @@ static void		proc_philo(t_var *var, int k, int status)
 		{
 			if (WEXITSTATUS(status) == 1)
 				if (++i == var->number_of_philosopher)
-					printf("todos comieron\n");
+					printf("Bye\n");
 			if (WEXITSTATUS(status) == 0)
 			{
 				k = -1;
