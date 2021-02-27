@@ -6,7 +6,7 @@
 /*   By: corozco <3535@3535.3535>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 02:26:33 by corozco           #+#    #+#             */
-/*   Updated: 2021/02/25 15:48:49 by corozco          ###   ########.fr       */
+/*   Updated: 2021/02/25 12:54:53 by corozco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,6 @@ int				main(int ac, char **av)
 		return (ms_error("Error: arguments"));
 	if ((error = parse_arg(&var, ac, av)) == 1)
 		return (ms_error("Error: parsing"));
-	if (error == 3)
-		return (ms_error("Error: the philosophers aren't happy"));
 	if (error == 2 || create_philos(&var) == -1)
 		return (ms_error("Error: malloc"));
 	return (0);
